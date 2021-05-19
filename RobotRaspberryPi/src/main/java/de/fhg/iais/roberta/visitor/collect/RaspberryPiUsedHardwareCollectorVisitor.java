@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
@@ -42,6 +43,12 @@ public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedH
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTaskSimple) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

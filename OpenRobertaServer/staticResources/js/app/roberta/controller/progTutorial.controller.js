@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blockly', 'jquery' ], function(
-        exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
+define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'simulation.simulation', 'blockly', 'jquery'], function(
+    exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, SIM, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
@@ -10,6 +10,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     var credits = [];
     var maxCredits = [];
     var quiz = false;
+    var configData = {};
 
     function init() {
         tutorialList = GUISTATE_C.getListOfTutorials();
@@ -33,7 +34,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         tutorialId = tutId;
         tutorial = tutorialList[tutId];
         if (tutorial) {
-            ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
+            ROBOT_C.switchRobot(tutorial.robot, undefined, startTutorial);
         }
 
         function startTutorial() {
@@ -57,7 +58,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             // create this tutorial navigation
             for (var i = 0; i < tutorial.step.length; i++) {
                 $('#tutorial-list').append($('<li>').attr('class', 'step').append($('<a>').attr({
-                    'href' : '#'
+                    'href': '#'
                 }).append(i + 1)));
             }
             $('#tutorial-list li:last-child').addClass('last');
@@ -65,7 +66,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
             // prepare the view
             $('#tutorial-navigation').fadeIn(750);
-            $('#head-navigation').fadeOut(750);
+            $('#head-navigation').hide();
 
             $('#tutorial-list :first-child').addClass('active');
             $('#tutorialButton').show();
@@ -73,22 +74,97 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
             initStepEvents();
             createInstruction();
-            openTutorialView();
+            if (tutorial.instructions) {
+                openTutorialView();
+            }
             showOverview();
         }
     }
     exports.loadFromTutorial = loadFromTutorial;
 
     function initStepEvents() {
-        $("#tutorial-list.nav li.step a").on("click", function() {
-            Blockly.hideChaff();
-            step = $(this).text() - 2;
-            nextStep();
-            openTutorialView();
-        });
-        $("#tutorialEnd").one("click", function() {
-            exitTutorial();
-        });
+        if (tutorial.instructions) {
+            $("#tutorial-list.nav li.step a").on("click", function() {
+                Blockly.hideChaff();
+                step = $(this).text() - 2;
+                nextStep();
+                openTutorialView();
+            });
+            $("#tutorialEnd").one("click", function() {
+                exitTutorial();
+            });
+        } else {
+            blocklyWorkspace.addChangeListener(function(event) {
+                if (event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+                    configData = SIM.exportConfigData();
+                    setTimeout(function() {
+                        $("#state").fadeOut(550, function() {
+                            $("#state").removeClass("typcn-edit").addClass("typcn-eye-outline").fadeIn(550);
+                        });
+                        var blocks = blocklyWorkspace.getAllBlocks();
+                        for (var i = 1; i < blocks.length; i++) {
+                            // blocks[i].setDisabled(true);
+                            blocks[i].setMovable(false);
+                        }
+                        Blockly.hideChaff();
+                        $(".blocklyWorkspace>.blocklyFlyout").fadeOut();
+                        $('#simControl').trigger("click");
+                    }, 500);
+                }
+            });
+            $('#simControl').on("simTerminated", function() {
+                var blocks = blocklyWorkspace.getAllBlocks();
+                if (checkSolutionCorrect(blocks)) {
+                    for (var i = 1; i < blocks.length; i++) {
+                        blocks[i].setDisabled(true);
+                        //blocks[i].setMovable(false);
+                    }
+                    setTimeout(function() {
+                        $("#state").fadeOut(550, function() {
+                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-edit").fadeIn(550);
+                        });
+                        Blockly.hideChaff();
+                        $(".blocklyWorkspace>.blocklyFlyout").fadeIn(function() {
+                            nextStep();
+                        });
+                    }, 500);
+                } else {
+                    SIM.loadConfigData(configData);
+                    setTimeout(function() {
+                        var blocks = blocklyWorkspace.getAllBlocks();
+                        var toDelete = 1;
+                        if (tutorial.step[step - 1]) {
+                            toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
+                        } else {
+                            toDelete = blocks.length - 1; // start block always stays
+                        }
+                        for (i = 0; i < toDelete; i++) {
+                            blocks[blocks.length - 1].dispose(false, true);
+                            blocks = blocklyWorkspace.getAllBlocks();
+                        }
+                        $("#state").fadeOut(550, function() {
+                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-edit").fadeIn(550);
+                        });
+                        Blockly.hideChaff();
+                        $(".blocklyWorkspace>.blocklyFlyout").fadeIn();
+                    }, i * 200);
+                }
+            });
+        }
+    }
+
+    function checkSolutionCorrect(blocks) {
+        if (tutorial.step[step].solution) {
+            for (i = 0; i < tutorial.step[step].solution.length; i++) {
+
+                if (blocks[i + 1].type != tutorial.step[step].solution[i]) {
+                    console.log(blocks[1].type);
+                    console.log(tutorial.step[step].solution[i]);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     function showOverview() {
@@ -134,75 +210,88 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         });
 
         $('#tutorialOverview').modal({
-            backdrop : 'static',
-            keyboard : false,
-            show : true
+            backdrop: 'static',
+            keyboard: false,
+            show: true
         });
     }
 
     function createInstruction() {
         if (tutorial.step[step]) {
-            $('#tutorialContent').empty();
-            if (tutorial.step[step].instruction) {
-                if (tutorial.step[step].toolbox) {
-                    try {
-                        PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
-                        Blockly.mainWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
-                    } catch (e) {
-                        console.log(e);
-                    }
+            if (tutorial.step[step].toolbox) {
+                try {
+                    blocklyWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
+                    PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
+                } catch (e) {
+                    console.log(e);
                 }
-                if (tutorial.step[step].header) {
-                    $('#tutorialContent').append($('<h3>').attr('class', 'quiz header').append(tutorial.step[step].header));
-                }
-                $('#tutorialContent').append(tutorial.step[step].instruction);
-                if (tutorial.step[step].tip) {
-                    $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip'));
-                    if (Array.isArray(tutorial.step[step].tip)) {
-                        for (var i = 0; i < tutorial.step[step].tip.length; i++) {
-                            $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip[i] + '</li>');
+            }
+            if (tutorial.instructions) {
+                $('#tutorialContent').empty();
+                if (tutorial.step[step].instruction) {
+                    if (tutorial.step[step].toolbox) {
+                        try {
+                            PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
+                            blocklyWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
+                        } catch (e) {
+                            console.log(e);
                         }
-                    } else {
-                        $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip + '</li>');
                     }
-                }
-
-                if (tutorial.step[step].solution) {
-                    $('#tutorialContent').append($('<div>').attr('id', 'helpDiv').append($('<button>', {
-                        'text' : 'Hilfe',
-                        'id' : 'quizHelp',
-                        'class' : 'btn test',
-                        'click' : function() {
-                            showSolution();
+                    if (tutorial.step[step].header) {
+                        $('#tutorialContent').append($('<h3>').attr('class', 'quiz header').append(tutorial.step[step].header));
+                    }
+                    $('#tutorialContent').append(tutorial.step[step].instruction);
+                    if (tutorial.step[step].tip) {
+                        $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip'));
+                        if (Array.isArray(tutorial.step[step].tip)) {
+                            for (var i = 0; i < tutorial.step[step].tip.length; i++) {
+                                $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip[i] + '</li>');
+                            }
+                        } else {
+                            $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip + '</li>');
                         }
-                    })));
-                }
+                    }
 
-                if (step == maxSteps - 1) { // last step
-                    $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-                        'text' : 'Tutorial beenden',
-                        'class' : 'btn',
-                        'click' : function() {
-                            MSG.displayMessage(tutorial.end, "POPUP", "");
-                            $(".modal").one('hide.bs.modal', function(e) {
-                                $("#tutorialEnd").trigger("click");
+                    if (tutorial.step[step].solution) {
+                        $('#tutorialContent').append($('<div>').attr('id', 'helpDiv').append($('<button>', {
+                            'text': 'Hilfe',
+                            'id': 'quizHelp',
+                            'class': 'btn test',
+                            'click': function() {
+                                showSolution();
+                            }
+                        })));
+                    }
+
+                    if (step == maxSteps - 1) { // last step
+                        $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
+                            'text': 'Tutorial beenden',
+                            'class': 'btn',
+                            'click': function() {
+                                MSG.displayMessage(tutorial.end, "POPUP", "");
+                                $(".modal").one('hide.bs.modal', function(e) {
+                                    $("#tutorialEnd").trigger("click");
+                                    return false;
+                                });
                                 return false;
-                            });
-                            return false;
-                        }
-                    })));
+                            }
+                        })));
+                    } else {
+                        $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
+                            'text': 'weiter',
+                            'class': 'btn',
+                            'click': function() {
+                                createQuiz();
+                            }
+                        })));
+                    }
                 } else {
-                    $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-                        'text' : 'weiter',
-                        'class' : 'btn',
-                        'click' : function() {
-                            createQuiz();
-                        }
-                    })));
+                    // apparently a step without an instruction -> go directly to the quiz
+                    createQuiz();
                 }
-            } else {
-                // apparently a step without an instruction -> go directly to the quiz
-                createQuiz();
+            }
+            if (tutorial.step[step].simulationSettings) {
+                SIM.loadConfigData(tutorial.step[step].simulationSettings);
             }
         }
     }
@@ -220,21 +309,21 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         answer = answer.substr(1);
                     }
                     $('#tutorialContent .quiz.content').append($('<label>').attr('class', 'quiz answer').append(answer).append($('<input>', {
-                        'type' : 'checkbox',
-                        'class' : 'quiz',
-                        'name' : 'answer_' + iAnswer,
-                        'id' : iQuiz + '_' + iAnswer,
-                        'value' : correct,
+                        'type': 'checkbox',
+                        'class': 'quiz',
+                        'name': 'answer_' + iAnswer,
+                        'id': iQuiz + '_' + iAnswer,
+                        'value': correct,
                     })).append($('<span>', {
-                        'for' : iQuiz + '_' + iAnswer,
-                        'class' : 'checkmark quiz'
+                        'for': iQuiz + '_' + iAnswer,
+                        'class': 'checkmark quiz'
                     })));
                 });
             });
             $('#tutorialContent .quiz.content').append($('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append($('<button/>', {
-                text : 'prüfen!',
-                'class' : 'btn test left',
-                click : function() {
+                text: 'prüfen!',
+                'class': 'btn test left',
+                click: function() {
                     checkQuiz();
                 }
             })));
@@ -270,28 +359,28 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                     percent = Math.round(100 / finalMaxCredits * finalCredits);
                 }
                 var thumbs = Math.round((percent - 50) / 17) + 1;
-                var $quizFooter = $('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append(finalCredits + ' von ' + finalMaxCredits
-                        + ' Antworten oder ' + percent + '% sind richtig! ');
+                var $quizFooter = $('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append(finalCredits + ' von ' + finalMaxCredits +
+                    ' Antworten oder ' + percent + '% sind richtig! ');
                 $quizFooter.insertBefore($('.quiz.continue'));
                 $('#quizFooter').append($('<span>', {
-                    'id' : 'quizResult'
+                    'id': 'quizResult'
                 }));
                 if (percent > 0) {
                     $('#quizResult').append($('<span>', {
-                        'class' : 'typcn typcn-thumbs-up'
+                        'class': 'typcn typcn-thumbs-up'
                     }));
                 }
                 if (percent == 100) {
                     $('#quizResult').append($('<span>', {
-                        'class' : 'typcn typcn-thumbs-up'
+                        'class': 'typcn typcn-thumbs-up'
                     }));
                     $('#quizResult').append($('<span>', {
-                        'class' : 'typcn typcn-thumbs-up'
+                        'class': 'typcn typcn-thumbs-up'
                     }));
                     $('#quizResult').append(' Spitze!');
                 } else if (percent > 80) {
                     $('#quizResult').append($('<span>', {
-                        'class' : 'typcn typcn-thumbs-up'
+                        'class': 'typcn typcn-thumbs-up'
                     }));
                     $('#quizResult').append(' Super!');
                 } else if (percent > 60) {
@@ -309,7 +398,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
     function showSolution() {
         $('#helpDiv').append($('<div>').append(tutorial.step[step].solution).attr({
-            'class' : 'imgSol'
+            'class': 'imgSol'
         }));
         $('#quizHelp').remove();
     }
@@ -337,9 +426,9 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('#quizFooter').html('');
         if (countCorrect !== totalCorrect) {
             $('#quizFooter').append($('<button/>', {
-                text : 'nochmal',
-                'class' : 'btn test',
-                click : function() {
+                text: 'nochmal',
+                'class': 'btn test',
+                click: function() {
                     createQuiz();
                 }
             }));
@@ -352,13 +441,13 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 confirmText = countCorrect + ' Anworten von ' + totalCorrect + ' sind richtig!';
             }
             $('#quizFooter').append($('<span>', {
-                text : confirmText,
+                text: confirmText,
             }));
         }
         $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-            'text' : 'weiter',
-            'class' : 'btn',
-            'click' : function() {
+            'text': 'weiter',
+            'class': 'btn',
+            'click': function() {
                 nextStep();
             }
         })));
@@ -368,7 +457,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
     function shuffle(answers) {
         for (var j, x, i = answers.length; i; j = Math.floor(Math.random() * i), x = answers[--i], answers[i] = answers[j], answers[j] = x)
-            ;
+        ;
         return answers;
     }
 

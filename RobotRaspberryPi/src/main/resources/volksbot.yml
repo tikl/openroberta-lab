@@ -1,0 +1,27 @@
+include: "classpath:/raspberrypi.yml"
+block:
+  STEP_FORWARD:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward
+    type: [ step_forward ]
+
+  STEP_BACKWARD:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward
+    type: [ step_backward ]
+
+  ROTATE_RIGHT:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight
+    type: [ rotate_right ]
+
+  ROTATE_LEFT:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft
+    type: [ rotate_left ]
+
+  MAIN_TASK_SIMPLE:
+    category: TASK
+    implementor: de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple
+    type: [ start ]
+    

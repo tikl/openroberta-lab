@@ -1,5 +1,6 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
-        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
+define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
+    'jquery-validate'
+], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -22,28 +23,28 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     function initView() {
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
-            path : '/blockly/',
-            toolbox : toolbox,
-            trashcan : true,
-            scrollbars : true,
-            media : '../blockly/media/',
-            zoom : {
-                controls : true,
-                wheel : false,
-                startScale : 1.0,
-                maxScale : 4,
-                minScale : .25,
-                scaleSpeed : 1.1
+            path: '/blockly/',
+            toolbox: toolbox,
+            trashcan: true,
+            scrollbars: true,
+            media: '../blockly/media/',
+            zoom: {
+                controls: true,
+                wheel: false,
+                startScale: 1.0,
+                maxScale: 4,
+                minScale: .25,
+                scaleSpeed: 1.1
             },
-            checkInTask : [ 'start', '_def', 'event' ],
-            variableDeclaration : true,
-            robControls : true,
-            theme : GUISTATE_C.getTheme()
+            checkInTask: ['start', '_def', 'event'],
+            variableDeclaration: true,
+            robControls: true,
+            theme: GUISTATE_C.getTheme()
         });
         $(window).resize();
         blocklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
         });
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
@@ -55,13 +56,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
 
     function initEvents() {
         $('#sliderDiv').draggable({
-            'axis' : 'x',
-            'cursor' : 'col-resize'
+            'axis': 'x',
+            'cursor': 'col-resize'
         });
         $('#tabProgram').on('click', function(e) {
             e.preventDefault();
-            if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved()
-                    && !GUISTATE_C.isConfigurationAnonymous()) {
+            if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved() &&
+                !GUISTATE_C.isConfigurationAnonymous()) {
                 $('#show-message-confirm').one('shown.bs.modal', function(e) {
                     $('#confirm').off();
                     $('#confirm').on('click', function(e) {
@@ -132,7 +133,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
-                    offset : -10,
+                    offset: -10,
                 });
             }
             return false;
@@ -151,7 +152,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
         PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramOwnerName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(
-                result) {
+            result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
                 GUISTATE_C.setProgramSaved(true);
@@ -205,6 +206,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             robotType = GUISTATE_C.findRobot(robotGroup);
         }
         var owner = 'Gallery';
+
         function loadProgramFromGallery() {
             PROGRAM.loadProgramFromListing(programName, owner, user, function(result) {
                 if (result.rc === 'ok') {
@@ -212,8 +214,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                     result.name = programName;
                     GUISTATE_C.setProgram(result, owner, user);
                     GUISTATE_C.setProgramXML(result.progXML);
-//                    GUISTATE_C.setConfigurationName('');
-//                    GUISTATE_C.setConfigurationXML(result.confXML);
+                    //                    GUISTATE_C.setConfigurationName('');
+                    //                    GUISTATE_C.setConfigurationXML(result.confXML);
                     if (result.configName === undefined) {
                         if (result.confXML === undefined) {
                             GUISTATE_C.setConfigurationNameDefault();
@@ -260,20 +262,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         }, saveAsProgramToServer, function() {
 
         }, {
-            rules : {
-                singleModalInput : {
-                    required : true,
-                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
                 }
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                singleModalInput : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    regex : Blockly.Msg["MESSAGE_INVALID_NAME"]
+            messages: {
+                singleModalInput: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    regex: Blockly.Msg["MESSAGE_INVALID_NAME"]
                 }
             }
         });
@@ -305,6 +307,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
      */
     function newProgram(opt_further) {
         var further = opt_further || false;
+
         function loadNewProgram() {
             var result = {};
             result.rc = 'ok';
@@ -347,8 +350,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
         //TODO this should be removed after the next release
-        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-                + '</config></export>';
+        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
+            '</config></export>';
         var link = 'https://lab.open-roberta.org/#loadProgram';
         link += '&&' + GUISTATE_C.getRobot();
         link += '&&' + GUISTATE_C.getProgramName();
@@ -370,8 +373,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
      */
     function exportXml() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
-                + GUISTATE_C.getConfigurationXML() + '</config></export>';
+        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>' +
+            GUISTATE_C.getConfigurationXML() + '</config></export>';
         LOG.info('ProgramExport');
         UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
         MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
@@ -425,8 +428,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
 
     function resetView() {
         blocklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
         });
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();

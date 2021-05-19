@@ -511,15 +511,15 @@ define({
 
     MATH_ON_LIST: "createMathOnList",
 
-    TRACKWIDTH: 40,
+    // TRACKWIDTH: 120,
 
-    TURN_RATIO: (40 / 3.) / 2.8,
+    // TURN_RATIO: (120 / 3.) / 12,
 
-    WHEEL_DIAMETER: 5.6,
+    // WHEEL_DIAMETER: 5.6,
 
     MAXDIAG: 2500,
 
-    MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+    // MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
 
     ENC: 360.0 / (3.0 * Math.PI * 5.6),
 
@@ -535,7 +535,7 @@ define({
 
     DEBUG_STEP_OVER: "DebugStepOver",
 
-    MIN_SIZE_OBJECT: 10, 
-    
+    MIN_SIZE_OBJECT: 10,
+
     CORNER_RADIUS: 5
 });

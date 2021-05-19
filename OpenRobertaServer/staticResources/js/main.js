@@ -79,6 +79,7 @@ require.config({
         'simulation.robot.simple': 'app/simulation/simulationLogic/robot.simple',
         'simulation.robot.ev3': 'app/simulation/simulationLogic/robot.ev3',
         'simulation.robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
+        'simulation.robot.volksbot': 'app/simulation/simulationLogic/robot.volksbot',
         'simulation.scene': 'app/simulation/simulationLogic/scene',
         'simulation.simulation': 'app/simulation/simulationLogic/simulation',
 
@@ -138,13 +139,14 @@ require.config({
     }
 });
 
-require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
-    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
-        require) {
+    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'
+], function(
+    require) {
     $ = require('jquery');
     WRAP = require('wrap');
     LOG = require('log');
@@ -226,19 +228,23 @@ function init() {
         notificationController.init();
         // nnController.init();
 
-        $(".cover").fadeOut(100, function() {
-            if (guiStateController.getStartWithoutPopup()) {
-                userModel.getStatusText(function(result) {
-                    if (result.statustext[0] !== "" && result.statustext[1] !== "") {
-                        $('#modal-statustext').modal("show");
+        /*        $(".cover").fadeOut(100, function() {
+                    if (guiStateController.getStartWithoutPopup()) {
+                        userModel.getStatusText(function(result) {
+                            if (result.statustext[0] !== "" && result.statustext[1] !== "") {
+                                $('#modal-statustext').modal("show");
+                            }
+                        });
+                    } else {
+                        $("#show-startup-message").modal("show");
                     }
-                });
-            } else {
-                $("#show-startup-message").modal("show");
-            }
+                });*/
+        progSimController.toggleSim();
+        $(".pace").fadeOut(0);
+        $(".cover").fadeOut(1000, function() {
+            tutorialController.loadFromTutorial("volksbot1");
         });
 
-        $(".pace").fadeOut(500);
     });
 }
 

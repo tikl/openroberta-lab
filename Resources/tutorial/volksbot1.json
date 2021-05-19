@@ -1,0 +1,68 @@
+{
+    "name": "Hallo",
+    "language": "DE",
+    "robot": "volksbot",
+    "sim": "sim",
+    "instructions": false,
+    "level": 1,
+    "index": 100,
+    "time": "30 min",
+    "age": "ab 8 Jahre",
+
+    "end": "<p>Prima, du hast gelernt, wie man Calliope so programmiert, dass er dich und deine Freunde begr&uuml;&szlig;t. Du kannst an den Programmierbl&ouml;cken erkennen, ob sie Zeit verbrauche oder nicht und du hast dein erstes Programm erstellt!</p>\n",
+    "step": [{
+            "header": "1",
+            "program": "<block_set xmlns='http://www.w3.org/1999/xhtml' xmlversion='3.1' robottype=\"volksbot\"><instance><block type='start'></block><shadow type='step_forward'></shadow></instance></block_set>",
+            "simulationSettings": { "robotPoses": [{ "x": 0.18704756142360138, "y": 0.2037840712215037, "theta": 0, "xOld": 0.18704756142360138, "yOld": 0.2037840712215037, "transX": 0, "transY": 0, "thetaDiff": 0 }], "obstacles": [], "colorAreas": [{ "x": 0.061688311999999995, "y": 0.10309278303387334, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.23701298700000004, "y": 0.10309278303387334, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.41233766200000005, "y": 0.10309278303387334, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.587662337, "y": 0.10309278303387334, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#ff0000", "form": "rectangle", "type": "colorArea" }, { "x": 0.7629870119999999, "y": 0.10309278303387334, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.060563452607424094, "y": 0.30191458002945504, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.2358881276074241, "y": 0.30191458002945504, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.41233766200000005, "y": 0.30191458002945504, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.587662337, "y": 0.30191458002945504, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.760737293214848, "y": 0.30530087549252216, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.5007363770250368, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.23701298700000004, "y": 0.5007363770250368, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.41233766200000005, "y": 0.5007363770250368, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.587662337, "y": 0.5007363770250368, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.7629870119999999, "y": 0.5007363770250368, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.6995581740206185, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.23701298700000004, "y": 0.6995581740206185, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.41233766200000005, "y": 0.6995581740206185, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0FF", "form": "rectangle", "type": "colorArea" }, { "x": 0.587662337, "y": 0.6995581740206185, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#FFF", "form": "rectangle", "type": "colorArea" }, { "x": 0.7629870119999999, "y": 0.6995581740206185, "w": 0.17532467499999999, "h": 0.19882179699558172, "theta": 0, "color": "#0F4", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.10309278303387334, "w": 0.876623375, "h": 0.003, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.30191458002945504, "w": 0.876623375, "h": 0.003, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.5007363770250368, "w": 0.876623375, "h": 0.003, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.6995581740206185, "w": 0.876623375, "h": 0.003, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.898379971, "w": 0.876623375, "h": 0.003, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.061688311999999995, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.23701298700000004, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.41233766200000005, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.587662337, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.7629870119999999, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }, { "x": 0.938311687, "y": 0.10309278303387334, "w": 0.0026, "h": 0.795287188, "theta": 0, "color": "#000000", "form": "rectangle", "type": "colorArea" }], "ruler": { "img": null, "color": null, "yOld": 0, "w": 0, "wOld": 0, "x": 0, "xOld": 0, "h": 0, "y": 0, "type": "ruler", "hOld": 0 } },
+            "toolbox": "<toolbox_set id='toolbox'><block type='step_forward'></block></toolbox_set>",
+            "solution": ["step_forward"],
+            "maxBlocks": 2
+        },
+        {
+            "header": "2",
+            "toolbox": "<toolbox_set id='toolbox'><block type='step_forward'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward"],
+            "maxBlocks": 3
+        }, {
+            "header": "3",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right"],
+            "maxBlocks": 4
+        }, {
+            "header": "5",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward"],
+            "maxBlocks": 5
+        }, {
+            "header": "6",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward"],
+            "maxBlocks": 6
+        }, {
+            "header": "7",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward", "rotate_left"],
+            "maxBlocks": 7
+        }, {
+            "header": "8",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward", "rotate_left", "step_forward"],
+            "maxBlocks": 8
+        }, {
+            "header": "9",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward", "rotate_left", "step_forward", "step_forward"],
+            "maxBlocks": 9
+        }, {
+            "header": "10",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward", "rotate_left", "step_forward", "step_forward", "rotate_right"],
+            "maxBlocks": 10
+        }, {
+            "header": "11",
+            "toolbox": "<toolbox_set><block type='step_forward'></block><block type='rotate_left'></block><block type='rotate_right'></block></toolbox_set>",
+            "solution": ["step_forward", "step_forward", "rotate_right", "step_forward", "step_forward", "rotate_left", "step_forward", "step_forward", "rotate_right", "step_forward"],
+            "maxBlocks": 11
+        }
+    ]
+}
