@@ -7,8 +7,7 @@
  * @namespace SIM
  */
 
-define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee'
-], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE) {
+define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee'], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE) {
 
     const standColorObstacle = "#33B8CA";
     const standColorArea = "#FBED00";
@@ -35,7 +34,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     var storedPrograms;
     var copiedObject;
     var customBackgroundLoaded = false;
-    var debugMode = false;
+    var debugMode = true;
     var breakpoints = [];
     var obstacleList = [];
     var colorAreaList = [];
@@ -51,9 +50,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         hues: 8,
         setText: false
     });
-    var imgList = ['/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/ruler.svg',
+    var imgList = ['/js/app/simulation/simBackgrounds/elefant.png', '/js/app/simulation/simBackgrounds/ruler.svg',
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg',
-        '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg',
+        '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/volksbot.svg',
         '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg',
         '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/blank.svg',
         '/js/app/simulation/simBackgrounds/mathBackground.svg'
@@ -484,6 +483,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
             }
+            $('#simControl').trigger("simTerminated");
         }
         console.log("END of Sim");
     }
@@ -555,7 +555,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 setObstacle();
                 setRuler();
                 initScene();
-
             });
 
         } else {
@@ -598,9 +597,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     var reset = false;
 
     /*
-        * The below Colors are picked from the toolkit and should be used to color
-        * the robots
-        */
+     * The below Colors are picked from the toolkit and should be used to color
+     * the robots
+     */
     var colorsAdmissible = [
         [242, 148, 0],
         [143, 164, 2],
@@ -909,7 +908,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     e.stopPropagation();
                     break;
                 default:
-                // nothing to do so far
+                    // nothing to do so far
             }
             highLightCorners = calculateCorners(selectedObject);
             selectedObject.type === "obstacle" ? updateObstacleLayer() : updateColorAreaLayer();
@@ -968,7 +967,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 e.stopPropagation();
                 break;
             default:
-            // nothing to do so far
+                // nothing to do so far
         }
         $("#robotLayer").attr("tabindex", 0);
         $("#robotLayer").focus();
@@ -1691,10 +1690,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 return function(e) {
                     try {
                         const configData = JSON.parse(e.target.result);
-                        relatives2coordinates(configData);
-                        resetSelection();
-                        resetScene(obstacleList || [], colorAreaList || [])
-                        initScene();
+                        loadConfigData(configData);
                     } catch (ex) {
                         MSG.displayPopupMessage("Blockly.Msg.POPUP_BACKGROUND_STORAGE", Blockly.Msg.POPUP_CONFIG_UPLOAD_ERROR);
                     }
@@ -1707,6 +1703,14 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
     exports.importConfigData = importConfigData;
 
+    function loadConfigData(configData) {
+        relatives2coordinates(configData);
+        resetSelection();
+        resetScene(obstacleList || [], colorAreaList || [])
+        initScene();
+    }
+    exports.loadConfigData = loadConfigData;
+
     function exportConfigData() {
         return coordinates2relatives();
     }
@@ -1716,6 +1720,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         let height = $('#unitBackgroundLayer').height();
         let width = $('#unitBackgroundLayer').width();
         let relatives = {};
+
         function calculateShape(object) {
             switch (object.form) {
                 case "rectangle":
@@ -1780,6 +1785,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     function relatives2coordinates(relatives) {
         let height = $('#unitBackgroundLayer').height();
         let width = $('#unitBackgroundLayer').width();
+
         function calculateShape(object) {
             switch (object.form) {
                 case "rectangle":
@@ -1957,7 +1963,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, num, robotBehaviour);
+            }, configuration, num, robotBehaviour, imgObstacle1);
             robot.canDraw = false;
         } else if (currentBackground == 3) {
             robot = new reqRobot({

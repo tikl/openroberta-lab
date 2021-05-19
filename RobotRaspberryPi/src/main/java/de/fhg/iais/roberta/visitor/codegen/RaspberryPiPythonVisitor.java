@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
 import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -235,7 +236,7 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
     public Void visitMotorRaspOnAction(MotorRaspOnAction<Void> motorRaspOnAction) {
         String prefix = "motor_";
         String blockType = motorRaspOnAction.getProperty().getBlockType();
-        if (blockType.equals("robActions_robot_on_rasp")||blockType.equals("robActions_robot_on_for_rasp")) {
+        if ( blockType.equals("robActions_robot_on_rasp") || blockType.equals("robActions_robot_on_for_rasp") ) {
             prefix = "robot_";
         }
         String direction = "";
@@ -556,10 +557,10 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
         nlIndent();
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
             String helperMethodImpls =
-                    this
-                            .getBean(CodeGeneratorSetupBean.class)
-                            .getHelperMethodGenerator()
-                            .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                this
+                    .getBean(CodeGeneratorSetupBean.class)
+                    .getHelperMethodGenerator()
+                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.sb.append(helperMethodImpls);
             nlIndent();
             nlIndent();
@@ -666,10 +667,40 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String prefix = "motor_";
-        if (motorStopAction.getProperty().getBlockType().equals("robActions_robot_stop_rasp")){
+        if ( motorStopAction.getProperty().getBlockType().equals("robActions_robot_stop_rasp") ) {
             prefix = "robot_";
         }
         this.sb.append(prefix).append(motorStopAction.getUserDefinedPort()).append(".stop()");
+        return null;
+    }
+
+    @Override
+    public Void visitStepForward(StepForward<Void> stepForward) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitStepBackward(StepBackward<Void> stepBackward) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRotateRight(RotateRight<Void> rotateRight) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

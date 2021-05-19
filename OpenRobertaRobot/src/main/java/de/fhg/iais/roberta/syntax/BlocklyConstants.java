@@ -196,6 +196,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_BRICK_LIGHT_RESET = "robActions_brickLight_reset";
     public static final String ROB_ACTIONS_MOTOR_DIFF_STOP = "robActions_motorDiff_stop";
     public static final String ROB_CONTROLS_START = "robControls_start";
+    public static final String START = "start";
     public static final String ROB_CONTROLS_START_ARDU = "robControls_start_ardu";
     public static final String ROB_CONTROLS_ACTIVITY = "robControls_activity";
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";

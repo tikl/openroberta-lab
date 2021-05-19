@@ -6,5 +6,4 @@ public class RaspberryPiUsedMethodCollectorVisitor extends AbstractUsedMethodCol
     public RaspberryPiUsedMethodCollectorVisitor(UsedMethodBean.Builder builder) {
         super(builder);
     }
-
 }

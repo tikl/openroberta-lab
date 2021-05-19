@@ -398,6 +398,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.lineWidth = 2;
             this.rCtx.fill();
             this.rCtx.closePath();
+            this.rCtx.drawImage(this.robots[r].img, -70, -40, 140, 140);
+
 
             //LED
             if (this.robots[r].led && !this.robots[r].leds) {
@@ -1017,7 +1019,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 values.light = {};
                 values.display = {};
                 values.light.ambientlight = this.robots[r].display.lightLevel;
-                if (robotName === 'Ev3' || robotName === 'Nxt' || robotName === "Mbot") {
+                if (robotName === 'Ev3' || robotName === 'Nxt' || robotName === "Mbot" || robotName === "Volksbot") {
                     values.display.brightness = this.robots[r].display.brightness;
                     values.display.pixel = this.robots[r].display.leds;
                 } else {
@@ -1114,24 +1116,28 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
 
     function addVariableValue(name, value) {
         switch (typeof value) {
-            case "number": {
-                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
-                break;
-            }
-            case "string": {
-                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
-                break;
-            }
-            case "boolean": {
-                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
-                break;
-            }
-            case "object": {
-                for (var i = 0; i < value.length; i++) {
-                    addVariableValue(name + " [" + String(i) + "]", value[i]);
+            case "number":
+                {
+                    $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
+                    break;
                 }
-                break;
-            }
+            case "string":
+                {
+                    $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                    break;
+                }
+            case "boolean":
+                {
+                    $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                    break;
+                }
+            case "object":
+                {
+                    for (var i = 0; i < value.length; i++) {
+                        addVariableValue(name + " [" + String(i) + "]", value[i]);
+                    }
+                    break;
+                }
         }
     }
 

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
 import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
@@ -95,6 +96,31 @@ public interface IRaspberryPiCollectorVisitor extends ICollectorVisitor, IRaspbe
     }
 
     default Void visitLedPulseAction(LedPulseAction<Void> ledPulseAction) {
+        return null;
+    }
+
+    @Override
+    default Void visitStepForward(StepForward<Void> stepForward) {
+        return null;
+    }
+
+    @Override
+    default Void visitStepBackward(StepBackward<Void> stepBackward) {
+        return null;
+    }
+
+    @Override
+    default Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
+        return null;
+    }
+
+    @Override
+    default Void visitRotateRight(RotateRight<Void> rotateRight) {
+        return null;
+    }
+
+    @Override
+    default Void visitMainTaskSimple(MainTaskSimple<Void> mainTaskSimple) {
         return null;
     }
 

@@ -1,0 +1,27 @@
+<svg width="770" height="600" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <rect id="svg_3" height="600" width="770" y="0" x="0" stroke="#000" fill="#f6eb61"/>
+  <rect fill="#fff" stroke="#000" x="45" y="166" width="135" height="135" id="svg_7"/>
+  <rect fill="#fff" stroke="#000" x="315" y="166" width="135" height="135" id="svg_8"/>
+  <rect fill="#fff" stroke="#000" x="585" y="166" width="135" height="135" id="svg_9"/>
+  <rect fill="#44b59d" stroke="#000" x="450" y="166" width="135" height="135" id="svg_10"/>
+  <rect fill="#ebc823" stroke="#000" x="180" y="166" width="135" height="135" id="svg_11"/>
+  <rect fill="#97d700" stroke="#000" x="45" y="300" width="135" height="135" id="svg_13"/>
+  <rect fill="#ce0037" stroke="#000" x="315" y="300" width="135" height="135" id="svg_14"/>
+  <rect fill="#ebc823" stroke="#000" x="585" y="300" width="135" height="135" id="svg_15"/>
+  <rect fill="#fff" stroke="#000" x="450" y="300" width="135" height="135" id="svg_16"/>
+  <rect fill="#fff" stroke="#000" x="180" y="300" width="135" height="135" id="svg_17"/>
+  <rect fill="#0082ff" stroke="#000" x="45" y="30" width="135" height="135" id="svg_1"/>
+  <rect fill="#ff8200" stroke="#000" x="315" y="30" width="135" height="135" id="svg_2"/>
+  <rect fill="#97d700" stroke="#000" x="585" y="30" width="135" height="135" id="svg_4"/>
+  <rect fill="#fff" stroke="#000" x="450" y="30" width="135" height="135" id="svg_5"/>
+  <rect fill="#fff" stroke="#000" x="180" y="30" width="135" height="135" id="svg_6"/>
+  <rect fill="#ffffff" stroke="#000" x="44" y="435" width="135" height="135" id="svg_20"/>
+  <rect fill="#fff" stroke="#000" x="315" y="435" width="135" height="135" id="svg_21"/>
+  <rect fill="#fff" stroke="#000" x="585" y="435" width="135" height="135" id="svg_22"/>
+  <rect fill="#ff8200" stroke="#000" x="450" y="435" width="135" height="135" id="svg_23"/>
+  <rect fill="#307fe2" stroke="#000" x="180" y="435" width="135" height="135" id="svg_24"/>
+ </g>
+
+</svg>

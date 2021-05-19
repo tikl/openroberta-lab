@@ -14,8 +14,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
@@ -105,9 +104,7 @@ public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
-        StmtList<Void> variables = mainTask.getVariables();
-        variables.accept(this);
+    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
         generateUserDefinedMethods();
         nlIndent();
         this.sb.append("def run(keyhandle, pErrorCode):");
