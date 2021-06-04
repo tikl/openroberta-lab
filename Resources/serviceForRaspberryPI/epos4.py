@@ -4,7 +4,7 @@ import time
 from ctypes import *
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-
+PATH_TO_LIB = '/opt/EposCmdLib_6.6.2.0/lib/v7/libEposCmd.so.6.6.2.0'
 
 cdll.LoadLibrary(PATH_TO_LIB)
 epos = CDLL(PATH_TO_LIB)
@@ -77,13 +77,15 @@ def MoveToPosition(keyhandle: int, node: int, position: int, absolute: bool, imm
 
 
 def Drive(keyhandle: int, position1: int, position2: int, velocity1: int, velocity2: int):
-    setPositionProfile(keyhandle, NodeID_1, velocity1, 2000, 5000, pErrorCode)
+    FACTOR = 73.5*2000
+
+    setPositionProfile(keyhandle, NodeID_1, velocity1, 1866, 4000, pErrorCode)
     EvalError(pErrorCode)
-    setPositionProfile(keyhandle, NodeID_2, velocity2, 2000, 5000, pErrorCode)
+    setPositionProfile(keyhandle, NodeID_2, velocity2, 2000, 4000, pErrorCode)
     EvalError(pErrorCode)
-    epos.VCS_MoveToPosition(keyhandle, NodeID_1, -position1, 0, 0, byref(pErrorCode))
+    epos.VCS_MoveToPosition(keyhandle, NodeID_1, -int((position1/53.1)*FACTOR), 0, 0, byref(pErrorCode))
     EvalError(pErrorCode)
-    epos.VCS_MoveToPosition(keyhandle, NodeID_2, position2, 0, 0, byref(pErrorCode))
+    epos.VCS_MoveToPosition(keyhandle, NodeID_2, int((position2/53.1)*FACTOR), 0, 0, byref(pErrorCode))
     EvalError(pErrorCode)
     DriveReached(keyhandle, 10, pErrorCode)
 
