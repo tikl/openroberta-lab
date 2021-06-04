@@ -676,31 +676,31 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitStepForward(StepForward<Void> stepForward) {
-        // TODO Auto-generated method stub
+        this.sb.append("Drive(keyhandle, 45, 45, 2000, 2000)");
         return null;
     }
 
     @Override
     public Void visitStepBackward(StepBackward<Void> stepBackward) {
-        // TODO Auto-generated method stub
+        this.sb.append("Drive(keyhandle, -45, -45, 2000, 2000)");
         return null;
     }
 
     @Override
     public Void visitRotateRight(RotateRight<Void> rotateRight) {
-        // TODO Auto-generated method stub
+        this.sb.append("Drive(keyhandle, -29.29, 29.29, 2000, 2000)");
         return null;
+
     }
 
     @Override
     public Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
-        // TODO Auto-generated method stub
+        this.sb.append("Drive(keyhandle, 29.29, -29.29, 2000, 2000)");
         return null;
     }
 
     @Override
     public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
-        // TODO Auto-generated method stub
         return null;
     }
 }
