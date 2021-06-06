@@ -1,8 +1,16 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerBeepAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkFrequencyAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedPulseAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkFrequencyAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedPulseAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
 import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
@@ -37,15 +45,5 @@ public interface IRaspberryPiVisitor<V> extends ISensorVisitor<V>, ILightVisitor
     V visitServoRaspOnAction(ServoRaspOnAction<V> servoRaspOnAction);
 
     V visitWriteGpioValueAction(WriteGpioValueAction<V> vWriteGpioValueAction);
-
-    V visitStepForward(StepForward<V> stepForward);
-
-    V visitStepBackward(StepBackward<V> stepBackward);
-
-    V visitRotateRight(RotateRight<V> rotateRight);
-
-    V visitRotateLeft(RotateLeft<V> rotateLeft);
-
-    V visitMainTaskSimple(MainTaskSimple<V> mainTaskSimple);
 
 }

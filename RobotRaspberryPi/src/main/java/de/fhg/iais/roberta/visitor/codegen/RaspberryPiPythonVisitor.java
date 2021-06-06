@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -22,10 +23,18 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerBeepAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkFrequencyAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedPulseAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkFrequencyAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedPulseAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
 import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -36,7 +45,12 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -48,6 +62,17 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
+
+    public RaspberryPiPythonVisitor() {
+        super(null, MutableClassToInstanceMap.create());
+        this.brickConfiguration = new ConfigurationAst.Builder().build();
+    }
+
+    public RaspberryPiPythonVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst brickConfiguration) {
+        super(programPhrases, beans);
+        this.brickConfiguration = brickConfiguration;
+    }
+
     protected final ConfigurationAst brickConfiguration;
 
     /**
@@ -149,9 +174,9 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
     public Void visitLedBlinkFrequencyAction(LedBlinkFrequencyAction<Void> ledBlinkFrequencyAction) {
         this.sb.append("blink(pwm_led_").append(ledBlinkFrequencyAction.getPort()).append(", ");
         ledBlinkFrequencyAction.getFrequency().accept(this);
-        sb.append(", ");
+        this.sb.append(", ");
         ledBlinkFrequencyAction.getNumBlinks().accept(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -188,13 +213,13 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
     public Void visitRgbLedBlinkFrequencyAction(RgbLedBlinkFrequencyAction<Void> rgbLedBlinkFrequencyAction) {
         this.sb.append("blink_rgb(rgb_led_").append(rgbLedBlinkFrequencyAction.getPort()).append(", ");
         rgbLedBlinkFrequencyAction.getFrequency().accept(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbLedBlinkFrequencyAction.getOnColor().accept(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbLedBlinkFrequencyAction.getOffColor().accept(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbLedBlinkFrequencyAction.getNumBlinks().accept(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -671,36 +696,6 @@ public class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements I
             prefix = "robot_";
         }
         this.sb.append(prefix).append(motorStopAction.getUserDefinedPort()).append(".stop()");
-        return null;
-    }
-
-    @Override
-    public Void visitStepForward(StepForward<Void> stepForward) {
-        this.sb.append("Drive(keyhandle, 45, 45, 2000, 2000)");
-        return null;
-    }
-
-    @Override
-    public Void visitStepBackward(StepBackward<Void> stepBackward) {
-        this.sb.append("Drive(keyhandle, -45, -45, 2000, 2000)");
-        return null;
-    }
-
-    @Override
-    public Void visitRotateRight(RotateRight<Void> rotateRight) {
-        this.sb.append("Drive(keyhandle, -29.29, 29.29, 2000, 2000)");
-        return null;
-
-    }
-
-    @Override
-    public Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
-        this.sb.append("Drive(keyhandle, 29.29, -29.29, 2000, 2000)");
-        return null;
-    }
-
-    @Override
-    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
         return null;
     }
 }

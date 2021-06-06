@@ -107,6 +107,7 @@ public class Util {
      * @return the factory for this plugin
      */
     public static IRobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
+        System.out.println(robotName + " " + resourceDir + " " + tempDir);
         Properties basicPluginProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         if ( basicPluginProperties == null ) {
             throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
@@ -128,9 +129,11 @@ public class Util {
         }
         String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
         if ( pluginFactory == null ) {
+
             throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
         } else {
             try {
+                System.out.println(pluginFactory);
                 PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
                 @SuppressWarnings("unchecked")
                 Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) Util.class.getClassLoader().loadClass(pluginFactory);

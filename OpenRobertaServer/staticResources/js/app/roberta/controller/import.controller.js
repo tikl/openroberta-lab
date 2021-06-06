@@ -1,6 +1,7 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-        'robot.controller', 'blockly', 'jquery', 'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
-        CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
+define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
+    'robot.controller', 'blockly', 'jquery', 'jquery-validate'
+], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
+    CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
 
     function init(callback) {
         $('#fileSelector').val(null);
@@ -26,7 +27,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         $('#fileSelector').trigger('click'); // opening dialog 
     }
     exports.importXml = importXml;
-    
+
     function importSourceCode(callback) {
         init(callback);
         $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
@@ -46,8 +47,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
     function loadProgramFromXML(name, xml) {
         if (xml.search("<export") === -1) {
-            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-                    + '</config></export>';
+            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
+                '</config></export>';
         }
         PROGRAM.loadProgramFromXML(name, xml, function(result) {
             if (result.rc == "ok") {

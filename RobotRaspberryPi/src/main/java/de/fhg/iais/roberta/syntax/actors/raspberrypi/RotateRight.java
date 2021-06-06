@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVolksbotVisitor;
 
 public class RotateRight<V> extends Action<V> {
 
@@ -48,7 +48,7 @@ public class RotateRight<V> extends Action<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IRaspberryPiVisitor<V>) visitor).visitRotateRight(this);
+        return ((IVolksbotVisitor<V>) visitor).visitRotateRight(this);
     }
 
     @Override

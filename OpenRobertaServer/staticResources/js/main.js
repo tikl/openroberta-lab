@@ -239,12 +239,14 @@ function init() {
                         $("#show-startup-message").modal("show");
                     }
                 });*/
-        progSimController.toggleSim();
+
+    }).then(function() {
+        return progSimController.toggleSim();
+    }).then(function() {
         $(".pace").fadeOut(0);
-        $(".cover").fadeOut(1000, function() {
+        $(".cover").fadeOut(500, function() {
             tutorialController.loadFromTutorial("volksbot1");
         });
-
     });
 }
 

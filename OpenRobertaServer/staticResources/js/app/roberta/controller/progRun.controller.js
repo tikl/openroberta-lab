@@ -51,6 +51,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
     function runOnBrick() {
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
+        $("#volksbotStart").prop('disabled', true);
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
 
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -144,7 +145,10 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
                 setTimeout(function() {
                     GUISTATE_C.setConnectionState("wait");
-                }, 5000);
+                    $("#volksbotStart").prop('disabled', false);
+                    $('#tutorialStartView').hide();
+                }, 500);
+                GUISTATE_C.setState(result);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else {
                 createDownloadLink(filename, result.compiledCode);
@@ -153,8 +157,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                 $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                     var step = $('<li class="typcn typcn-roberta">');
-                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                        || 'POPUP_DOWNLOAD_STEP_' + i;
+                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                        'POPUP_DOWNLOAD_STEP_' + i;
                     step.html('<span class="download-message">' + a + '</span>');
                     step.css('opacity', '0');
                     $('#download-instructions').append(step);
@@ -192,6 +196,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             }
         } else {
             GUISTATE_C.setConnectionState("wait");
+            $("#volksbotStart").prop('disabled', false);
+            $('#tutorialStartView').modal("hide");
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
@@ -237,8 +243,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                 var step = $('<li class="typcn typcn-roberta">');
-                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                    || 'POPUP_DOWNLOAD_STEP_' + i;
+                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                    'POPUP_DOWNLOAD_STEP_' + i;
                 step.html('<span class="download-message">' + a + '</span>');
                 step.css('opacity', '0');
                 $('#download-instructions').append(step);

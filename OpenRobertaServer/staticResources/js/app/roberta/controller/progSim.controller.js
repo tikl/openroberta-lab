@@ -213,6 +213,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
     }
 
     function toggleSim() {
+        var toggle = new $.Deferred();
         if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
             SIM.cancel();
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
@@ -232,30 +233,34 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 if (result.rc == "ok") {
-                    SIM.init([result], true, GUISTATE_C.getRobotGroup());
-                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
-                    if (SIM.getNumRobots() === 1 && debug) {
-                        $('#simStop, #simControlStepOver, #simControlStepInto').show();
-                        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
-                        $('#simControl').addClass("blue");
-                        SIM.updateDebugMode(true);
-                    } else {
-                        $('#simStop, #simControlStepOver, #simControlStepInto').hide();
-                        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-                        $('#simControl').removeClass("blue");
-                        SIM.endDebugging();
-                    }
-                    if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
-                        TOUR_C.getInstance().trigger('startSim');
-                    }
-                    let name = debug ? "simDebug" : "sim";
-                    $('#blockly').openRightView("sim", INITIAL_WIDTH, name);
+                    $.when(SIM.init([result], true, GUISTATE_C.getRobotGroup())).then(function() {
+                        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+                        if (SIM.getNumRobots() === 1 && debug) {
+                            $('#simStop, #simControlStepOver, #simControlStepInto').show();
+                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+                            $('#simControl').addClass("blue");
+                            SIM.updateDebugMode(true);
+                        } else {
+                            $('#simStop, #simControlStepOver, #simControlStepInto').hide();
+                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                            $('#simControl').removeClass("blue");
+                            SIM.endDebugging();
+                        }
+                        if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+                            TOUR_C.getInstance().trigger('startSim');
+                        }
+                        let name = debug ? "simDebug" : "sim";
+                        $('#blockly').openRightView("sim", INITIAL_WIDTH, name);
+                        toggle.resolve();
+                    });
                 } else {
                     MSG.displayInformation(result, "", result.message, "");
+                    toggle.resolve();
                 }
                 PROG_C.reloadProgram(result);
             });
         }
+        return toggle.promise();
     }
     exports.toggleSim = toggleSim;
 

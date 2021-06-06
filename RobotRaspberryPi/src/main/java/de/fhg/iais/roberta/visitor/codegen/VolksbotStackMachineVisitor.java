@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerBeepAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkAction;
@@ -42,10 +41,11 @@ import de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkFrequencyAction;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedPulseAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
 import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
 import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -72,9 +72,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVolksbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IRaspberryPiVisitor<V> {
+public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IRaspberryPiVisitor<V>, IVolksbotVisitor<V> {
     private final static int SPEED = 30;
     private final static int STEP_CM = 45;
     private final static int STEP_DEGREE = 90;

@@ -1,7 +1,8 @@
 define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
     'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
-        USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'
+], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
+    USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -18,7 +19,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
 
     // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
     function getUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1), sURLVariables = sPageURL.split(QUERY_DELIMITER), sParameterName, i;
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split(QUERY_DELIMITER),
+            sParameterName, i;
 
         for (i = 0; i < sURLVariables.length; i++) {
             sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
@@ -322,9 +325,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
             $('#navbarCollapse').collapse('hide');
         });
         if (GUISTATE_C.isPublicServerVersion()) {
-            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
-                + '<span id="" class="feedbackButton typcn typcn-feedback"></span>'
-                + '</div>'
+            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">' +
+                '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
+                '</div>'
             $("#rightMenuDiv").append(feedbackButton);
             window.onmessage = function(msg) {
                 if (msg.data === "closeFeedback") {
@@ -448,8 +451,8 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
                 if (domId === 'menuConnect') {
                     //console.log(GUISTATE_C.getIsAgent());
                     //console.log(GUISTATE_C.getConnection());
-                    if (GUISTATE_C.getConnection() == 'arduinoAgent'
-                        || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
+                    if (GUISTATE_C.getConnection() == 'arduinoAgent' ||
+                        (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
@@ -666,19 +669,19 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
             $('#show-about').modal('hide');
         });
 
-        $(window).on('beforeunload', function(e) {
-            return Blockly.Msg.POPUP_BEFOREUNLOAD;
-            // the following code doesn't work anymore, TODO check for a better solution.
-            //            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
-            //                if (GUISTATE_C.isUserLoggedIn()) {
-            //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
-            //                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
-            //                } else {
-            //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
-            //                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
-            //                }
-            //            }
-        });
+        //$(window).on('beforeunload', function(e) {
+        //  return Blockly.Msg.POPUP_BEFOREUNLOAD;
+        // the following code doesn't work anymore, TODO check for a better solution.
+        //            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
+        //                if (GUISTATE_C.isUserLoggedIn()) {
+        //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+        //                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+        //                } else {
+        //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+        //                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
+        //                }
+        //            }
+        //});
 
         // help Bootstrap to calculate the correct size for the collapse element when the sceen height is smaller than the elements height.
         $('#navbarCollapse').on('shown.bs.collapse', function() {

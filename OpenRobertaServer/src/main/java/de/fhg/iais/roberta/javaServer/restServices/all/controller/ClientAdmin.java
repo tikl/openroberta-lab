@@ -173,7 +173,7 @@ public class ClientAdmin {
                     if ( robot.equals("oraSim") ) {
                         httpSessionState.setToken("00000000");
                     } else {
-                        httpSessionState.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
+                        httpSessionState.setToken("ABCDEFGH");
                     }
                     httpSessionState.setRobotName(robot);
                     IRobotFactory robotFactory = httpSessionState.getRobotFactory();

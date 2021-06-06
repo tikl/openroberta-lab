@@ -525,7 +525,7 @@ define({
 
     MAX_WIDTH: 2000,
 
-    MAX_HEIGHT: 820,
+    MAX_HEIGHT: 840,
 
     WAVE_LENGTH: 60,
 

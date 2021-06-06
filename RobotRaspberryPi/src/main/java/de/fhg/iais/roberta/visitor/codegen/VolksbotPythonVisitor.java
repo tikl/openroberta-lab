@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.List;
-import java.util.Locale;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -9,56 +8,24 @@ import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction;
-import de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateRight;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepBackward;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.StepForward;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVolksbotVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
+ *
+ * @param <T>
  */
-public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
+public class VolksbotPythonVisitor extends RaspberryPiPythonVisitor implements IVolksbotVisitor<Void> {
 
-    /**
-     * initialize the Python code generator visitor.
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     */
     public VolksbotPythonVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, brickConfiguration, beans);
-    }
-
-    @Override
-    public Void visitMotorRaspOnAction(MotorRaspOnAction<Void> motorRaspOnAction) {
-        this.sb.append("Drive(keyhandle, 400000, 400000, 1000, 1000)");
-        nlIndent();
-        this.sb.append("Drive(keyhandle, -400000, -400000, 1000, 1000)");
-        nlIndent();
-        this.sb.append("Drive(keyhandle, 400000, 400000, 2000, 2000)");
-        nlIndent();
-        this.sb.append("Drive(keyhandle, 160000, -160000, 1000, 1000)");
-        nlIndent();
-        this.sb.append("Drive(keyhandle, 500000, 500000, 2000, 2000)");
-        nlIndent();
-        this.sb.append("Drive(keyhandle, 160000, -160000, 1000, 1000)");
-        return null;
-    }
-
-    @Override
-    public Void visitServoRaspOnAction(ServoRaspOnAction<Void> servoRaspOnAction) {
-        if ( servoRaspOnAction.getProperty().getBlockType().equals("robActions_servo_motor_on_rasp") ) {
-            this.sb.append("motor_servo_");
-        } else {
-            this.sb.append("motor_servo_angular_");
-        }
-        this.sb.append(servoRaspOnAction.getUserDefinedPort()).append(".");
-        this.sb.append(servoRaspOnAction.getMode().toString().toLowerCase(Locale.ROOT) + "()");
-        return null;
+        super(programPhrases, beans, brickConfiguration);
     }
 
     @Override
@@ -74,8 +41,8 @@ public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
         nlIndent();
         this.sb.append("import sys");
         nlIndent();
-        this.sb.append("sys.path.append('/home/pi/epos4.py')");
-        nlIndent();
+        // this.sb.append("sys.path.append('/home/pi/epos4.py')");
+        // nlIndent();
         this.sb.append("from epos4 import *");
         nlIndent();
         this.sb.append("import time");
@@ -104,25 +71,33 @@ public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
     }
 
     @Override
-    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
-        generateUserDefinedMethods();
-        nlIndent();
-        this.sb.append("def run(keyhandle, pErrorCode):");
-        incrIndentation();
-        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
-        } else {
-            addPassIfProgramIsEmpty();
-        }
-        return null;
-    }
-
-    @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
+        nlIndent();
+        this.sb.append("time.sleep(5)");
+        nlIndent();
+        this.sb.append("Drive(keyhandle, -10, -10)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        nlIndent();
+        this.sb.append("Turn(keyhandle, 60, -60)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        nlIndent();
+        this.sb.append("Drive(keyhandle, 115, 115)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        nlIndent();
+        this.sb.append("Align(keyhandle)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        nlIndent();
+        this.sb.append("Drive(keyhandle, -185, -185)");
+        nlIndent();
+        this.sb.append("# End ");
+
         decrIndentation(); // everything is still indented from main program
         nlIndent();
         nlIndent();
@@ -138,11 +113,13 @@ public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
         nlIndent();
         this.sb.append("keyhandle = openDevice()");
         nlIndent();
-        this.sb.append("activatePPM(keyhandle, NodeID_1, pErrorCode)");
+        this.sb.append("activateCVP(keyhandle, NodeID_1, pErrorCode)");
         nlIndent();
-        this.sb.append("activatePPM(keyhandle, NodeID_2, pErrorCode)");
+        this.sb.append("activateCVP(keyhandle, NodeID_2, pErrorCode)");
         nlIndent();
         this.sb.append("setState(keyhandle, 'enable')");
+        nlIndent();
+        this.sb.append("setState(keyhandle, 'quick_stop')");
         nlIndent();
         this.sb.append("run(keyhandle, pErrorCode)");
         decrIndentation();
@@ -182,26 +159,50 @@ public final class VolksbotPythonVisitor extends RaspberryPiPythonVisitor {
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("motor_servo_angular_").append(motorOnAction.getUserDefinedPort()).append(".angle = ");
-        motorOnAction.getParam().getSpeed().accept(this);
+    public Void visitStepForward(StepForward<Void> stepForward) {
+        this.sb.append("Drive(keyhandle, 45, 45)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
         return null;
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        this.sb.append("motor_servo_").append(motorSetPowerAction.getUserDefinedPort()).append(".value = ");
-        motorSetPowerAction.getPower().accept(this);
+    public Void visitStepBackward(StepBackward<Void> stepBackward) {
+        this.sb.append("Drive(keyhandle, -45, -45");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
         return null;
     }
 
     @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        String prefix = "motor_";
-        if ( motorStopAction.getProperty().getBlockType().equals("robActions_robot_stop_rasp") ) {
-            prefix = "robot_";
+    public Void visitRotateRight(RotateRight<Void> rotateRight) {
+        this.sb.append("Turn(keyhandle, -29.29, 29.29)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        return null;
+
+    }
+
+    @Override
+    public Void visitRotateLeft(RotateLeft<Void> rotateLeft) {
+        this.sb.append("Turn(keyhandle, 29.29, -29.29)");
+        nlIndent();
+        this.sb.append("time.sleep(1)");
+        return null;
+    }
+
+    @Override
+    public Void visitMainTaskSimple(MainTaskSimple<Void> mainTask) {
+        generateUserDefinedMethods();
+        nlIndent();
+        this.sb.append("def run(keyhandle, pErrorCode):");
+        incrIndentation();
+        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+            nlIndent();
+            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+        } else {
+            addPassIfProgramIsEmpty();
         }
-        this.sb.append(prefix).append(motorStopAction.getUserDefinedPort()).append(".stop()");
         return null;
     }
 }

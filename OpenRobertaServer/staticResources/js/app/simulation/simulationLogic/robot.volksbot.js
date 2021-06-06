@@ -25,6 +25,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             radius: 2.5,
             color: 'LIGHTGREY'
         };
+        this.touchSensor = null;
         this.frontLeft = {
             x: 60,
             y: -30,
@@ -60,6 +61,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             h: 5,
             color: '#000000'
         };
+        this.led = null;
         for (var s in this.touchSensor) {
             this.touchSensor[s].color = 'LIGHTGREY';
         }
@@ -188,9 +190,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
 
-        for (var s in this.touchSensor) {
-            this.touchSensor[s] = this.translate(sin, cos, this.touchSensor[s]);
-        }
         for (var s in this.colorSensor) {
             this.colorSensor[s] = this.translate(sin, cos, this.colorSensor[s]);
         }
@@ -198,13 +197,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
         }
         this.mouse = this.translate(sin, cos, this.mouse);
-
-        for (var s in this.touchSensor) {
-            this.touchSensor[s].x1 = this.frontRight.rx;
-            this.touchSensor[s].y1 = this.frontRight.ry;
-            this.touchSensor[s].x2 = this.frontLeft.rx;
-            this.touchSensor[s].y2 = this.frontLeft.ry;
-        }
 
         //update led(s)
         var led = this.robotBehaviour.getActionState("led", true);

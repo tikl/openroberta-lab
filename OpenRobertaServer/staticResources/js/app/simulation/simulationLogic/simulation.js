@@ -489,6 +489,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function init(programs, refresh, robotType) {
+        var ready = new $.Deferred();
         mouseOnRobotIndex = -1;
         storedPrograms = programs;
         numRobots = programs.length;
@@ -555,8 +556,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 setObstacle();
                 setRuler();
                 initScene();
+                ready.resolve();
             });
-
         } else {
             for (var i = 0; i < numRobots; i++) {
                 robots[i].replaceState(interpreters[i].getRobotBehaviour());
@@ -565,8 +566,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 }
             }
             reloadProgram();
+            ready.resolve();
         }
-
+        return ready.promise();
     }
 
     exports.init = init;

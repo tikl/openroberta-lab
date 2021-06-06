@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVolksbotVisitor;
 
 /**
  * This class represents the <b>robControls_start</b> block from Blockly into the AST (abstract syntax tree). Object from this class points to the main thread
@@ -47,7 +48,7 @@ public class MainTaskSimple<V> extends Task<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return null;
+        return ((IVolksbotVisitor<V>) visitor).visitMainTaskSimple(this);
     }
 
     @Override

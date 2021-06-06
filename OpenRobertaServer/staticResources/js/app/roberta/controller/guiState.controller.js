@@ -206,6 +206,20 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
             case GUISTATE.gui.connectionType.AUTO:
                 break;
             case GUISTATE.gui.connectionType.LOCAL:
+                if (GUISTATE.robot.state === 'wait') {
+                    $("#tutorialEnd").trigger("click");
+                    console.log("robot wait");
+                    // $("#volksbotStart").removeClass('disabled');
+                    // $('#volksbotStart').addClass('enabled');
+                } else if (GUISTATE.robot.state === 'busy') {
+                    console.log("robot busy");
+                    // $("#volksbotStart").removeClass('enabled');
+                    // $('#volksbotStart').addClass('disabled'); 
+                } else if (GUISTATE.robot.state === 'error') {
+                    console.log("robot error");
+                    // $("#volksbotStart").removeClass('enabled');
+                    // $('#volksbotStart').addClass('disabled');
+                }
                 break;
             case GUISTATE.gui.connectionType.JSPLAY:
                 break;
@@ -322,6 +336,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 setPingTime(SHORT);
                 break;
             case GUISTATE.gui.connectionType.LOCAL:
+                setPingTime(SHORT);
+                break;
             case GUISTATE.gui.connectionType.AUTO:
             case GUISTATE.gui.connectionType.JSPLAY:
                 SOCKET_C.listRobotStop();
@@ -560,8 +576,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL
-            || GUISTATE.gui.connectionType.JSPLAY) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
+            GUISTATE.gui.connectionType.JSPLAY) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {

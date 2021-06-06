@@ -74,7 +74,7 @@ public class HttpSessionState implements Serializable {
 
         this.userId = HttpSessionState.NO_USER;
         this.robotName = this.defaultRobotName;
-        this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+        this.token = "12345678"; //RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.programName = null;
         this.program = null;
         this.toolboxName = null;
@@ -229,7 +229,7 @@ public class HttpSessionState implements Serializable {
     public List<IRobotFactory> getRobotFactoriesOfGroup(String group) {
         List<IRobotFactory> groupMembers = this.robotPluginMap.values().stream().filter(factory -> {
             String propertyGroup = factory.getPluginProperties().getStringProperty("robot.plugin.group");
-            return (propertyGroup != null) && propertyGroup.equals(group);
+            return propertyGroup != null && propertyGroup.equals(group);
         }).collect(Collectors.toList());
         if ( groupMembers.isEmpty() ) {
             if ( !this.robotPluginMap.containsKey(group) ) {

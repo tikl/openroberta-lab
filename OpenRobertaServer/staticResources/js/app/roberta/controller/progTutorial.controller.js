@@ -11,6 +11,9 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     var maxCredits = [];
     var quiz = false;
     var configData = {};
+    var TIMEOUT = 30000;
+    var myTimeoutID;
+    var simRunning = false;
 
     function init() {
         tutorialList = GUISTATE_C.getListOfTutorials();
@@ -31,6 +34,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
 
     function loadFromTutorial(tutId) {
         // initialize this tutorial
+        clearTimeout(myTimeoutID);
         tutorialId = tutId;
         tutorial = tutorialList[tutId];
         if (tutorial) {
@@ -82,6 +86,12 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     }
     exports.loadFromTutorial = loadFromTutorial;
 
+    function reloadTutorial() {
+        clearTimeout(myTimeoutID);
+        window.location.reload();
+        // tutorialController.loadFromTutorial("volksbot11");
+    }
+
     function initStepEvents() {
         if (tutorial.instructions) {
             $("#tutorial-list.nav li.step a").on("click", function() {
@@ -95,11 +105,14 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
             });
         } else {
             blocklyWorkspace.addChangeListener(function(event) {
+                clearTimeout(myTimeoutID);
                 if (event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+                    simRunning = true;
+                    clearTimeout(myTimeoutID);
                     configData = SIM.exportConfigData();
                     setTimeout(function() {
                         $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-edit").addClass("typcn-eye-outline").fadeIn(550);
+                            $("#state").removeClass("typcn-hand").addClass("typcn-eye-outline").fadeIn(550);
                         });
                         var blocks = blocklyWorkspace.getAllBlocks();
                         for (var i = 1; i < blocks.length; i++) {
@@ -110,10 +123,32 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                         $(".blocklyWorkspace>.blocklyFlyout").fadeOut();
                         $('#simControl').trigger("click");
                     }, 500);
+                } else if (!simRunning) {
+                    myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
                 }
             });
             $('#simControl').on("simTerminated", function() {
                 var blocks = blocklyWorkspace.getAllBlocks();
+                if (step + 1 >= maxSteps) {
+                    var blocks = blocklyWorkspace.getAllBlocks();
+                    for (var i = 0; i < blocks.length; i++) {
+                        blocks[i].setDisabled(false);
+                        blocks[i].setMovable(false);
+                    }
+                    $("#volksbotStart").one("click", function() {
+                        $("#menuRunProg").trigger("click");
+                    })
+                    $("#tutorialStartViewText").html(tutorial.end);
+                    $('#tutorialStartView').modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true
+                    });
+                    $('#tutorialStartView').one("hidden.bs.modal", function(e) {
+                        reloadTutorial();
+                    })
+                    return;
+                }
                 if (checkSolutionCorrect(blocks)) {
                     for (var i = 1; i < blocks.length; i++) {
                         blocks[i].setDisabled(true);
@@ -121,7 +156,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                     }
                     setTimeout(function() {
                         $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-edit").fadeIn(550);
+                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
                         });
                         Blockly.hideChaff();
                         $(".blocklyWorkspace>.blocklyFlyout").fadeIn(function() {
@@ -143,7 +178,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                             blocks = blocklyWorkspace.getAllBlocks();
                         }
                         $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-edit").fadeIn(550);
+                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
                         });
                         Blockly.hideChaff();
                         $(".blocklyWorkspace>.blocklyFlyout").fadeIn();
@@ -156,7 +191,6 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     function checkSolutionCorrect(blocks) {
         if (tutorial.step[step].solution) {
             for (i = 0; i < tutorial.step[step].solution.length; i++) {
-
                 if (blocks[i + 1].type != tutorial.step[step].solution[i]) {
                     console.log(blocks[1].type);
                     console.log(tutorial.step[step].solution[i]);
@@ -168,52 +202,39 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     }
 
     function showOverview() {
-        if (!tutorial.overview)
-            return;
-        var html = tutorial.overview.description;
-        html += '</br></br><b>Lernziel: </b>';
-        html += tutorial.overview.goal;
-        html += '</br></br><b>Vorkenntnisse: </b>';
-        html += tutorial.overview.previous;
-        html += '<hr style="border: 2px solid #33B8CA; margin: 10px 0">';
-        html += '<span class="typcn typcn-stopwatch"/>&emsp;&emsp;';
-        html += tutorial.time;
-        html += '</br><span class="typcn typcn-group"/>&emsp;&emsp;';
-        html += tutorial.age;
-        html += '</br><span class="typcn typcn-simulation"/>&emsp;&emsp;';
-        html += tutorial.sim && (tutorial.sim === "sim" || tutorial.sim === 1) ? "ja" : "nein";
-        if (tutorial.level) {
-            html += '</br><span class="typcn typcn-mortar-board"/>&emsp;&emsp;';
-            var maxLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[1] : 3;
-            var thisLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[0] : tutorial.level;
-            for (var i = 1; i <= maxLevel; i++) {
-                if (i <= thisLevel) {
-                    html += '<span class="typcn typcn-star-full-outline"/>';
-                } else {
-                    html += '<span class="typcn typcn-star-outline"/>';
-                }
-            }
-        }
-        html += '</br><span class="typcn typcn-roberta"/>&emsp;&emsp;';
-        html += GUISTATE_C.getMenuRobotRealName(tutorial.robot);
-        $('#tutorialOverviewText').html(html);
-        $('#tutorialOverviewTitle').html(tutorial.name);
-        $('#tutorialAbort').off('click.dismiss.bs.modal');
-        $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
-            exitTutorial();
-            return false;
-        });
-        $('#tutorialContinue').off('click.dismiss.bs.modal');
-        $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
-            LOG.info('tutorial executed ' + tutorial.index + tutorialId);
-            return false;
-        });
+        if (tutorial.overview) {
+            var html = tutorial.overview.description;
 
-        $('#tutorialOverview').modal({
-            backdrop: 'static',
-            keyboard: false,
-            show: true
-        });
+            $('#tutorialOverviewText').html(html);
+            $('#tutorialOverviewTitle').html(tutorial.name);
+            $('#tutorialAbort').off('click.dismiss.bs.modal');
+            $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
+                exitTutorial();
+                return false;
+            });
+            $('#tutorialContinue').off('click.dismiss.bs.modal');
+            $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
+                LOG.info('tutorial executed ' + tutorial.index + tutorialId);
+                return false;
+            });
+
+            $('#tutorialOverview').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+        } else if (tutorial.startView) {
+            $("#tutorialStartViewText").html(tutorial.startView);
+            $('#tutorialStartView').one("hidden.bs.modal", function(e) {
+                clearTimeout(myTimeoutID);
+                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+            })
+            $('#tutorialStartView').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+        }
     }
 
     function createInstruction() {
@@ -351,7 +372,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 var finalCredits = 0;
                 for (var i = credits.length; i--;) {
                     if (credits[i]) {
-                        finalCredits += credits[i]
+                        finalCredits += credits[i];
                     }
                 }
                 var percent = 0;

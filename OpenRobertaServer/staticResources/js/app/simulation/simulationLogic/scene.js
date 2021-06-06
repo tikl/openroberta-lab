@@ -348,7 +348,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.beginPath();
             this.rCtx.moveTo(this.robots[r].geom.x - 5, 0);
             this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w + 5, 0);
-            this.rCtx.stroke();
+            //this.rCtx.stroke();
             //back wheel
             if (this.robots[r].wheelBack) {
                 this.rCtx.fillStyle = this.robots[r].wheelBack.color;
@@ -391,14 +391,14 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.lineTo(this.robots[r].geom.x, this.robots[r].geom.y + radius);
             this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y, this.robots[r].geom.x + radius, this.robots[r].geom.y);
             this.rCtx.closePath();
-            this.rCtx.fill();
+            // this.rCtx.fill();
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
             this.rCtx.beginPath();
             this.rCtx.lineWidth = 2;
-            this.rCtx.fill();
+            //   this.rCtx.fill();
             this.rCtx.closePath();
-            this.rCtx.drawImage(this.robots[r].img, -70, -40, 140, 140);
+            this.rCtx.drawImage(this.robots[r].img, -60, -30, 120, 120);
 
 
             //LED
@@ -442,9 +442,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.shadowOffsetX = 0;
             //wheels
             this.rCtx.fillStyle = this.robots[r].wheelLeft.color;
-            this.rCtx.fillRect(this.robots[r].wheelLeft.x, this.robots[r].wheelLeft.y, this.robots[r].wheelLeft.w, this.robots[r].wheelLeft.h);
+            //this.rCtx.fillRect(this.robots[r].wheelLeft.x, this.robots[r].wheelLeft.y, this.robots[r].wheelLeft.w, this.robots[r].wheelLeft.h);
             this.rCtx.fillStyle = this.robots[r].wheelRight.color;
-            this.rCtx.fillRect(this.robots[r].wheelRight.x, this.robots[r].wheelRight.y, this.robots[r].wheelRight.w, this.robots[r].wheelRight.h);
+            //this.rCtx.fillRect(this.robots[r].wheelRight.x, this.robots[r].wheelRight.y, this.robots[r].wheelRight.w, this.robots[r].wheelRight.h);
             this.rCtx.lineWidth = "0.5";
             //color
             var colorSensors = this.robots[r].colorSensor;
