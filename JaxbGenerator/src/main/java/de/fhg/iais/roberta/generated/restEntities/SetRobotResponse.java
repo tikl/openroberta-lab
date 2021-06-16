@@ -22,6 +22,8 @@ public class SetRobotResponse extends BaseResponse {
     protected boolean simDefined = false;
     protected boolean multipleSim;
     protected boolean multipleSimDefined = false;
+    protected boolean webotsSim;
+    protected boolean webotsSimDefined = false;
     protected boolean neuralNetwork;
     protected boolean neuralNetworkDefined = false;
     protected String connection;
@@ -81,6 +83,7 @@ public class SetRobotResponse extends BaseResponse {
         JSONObject configuration,
         boolean sim,
         boolean multipleSim,
+        boolean webotsSim,
         boolean neuralNetwork,
         String connection,
         String vendor,
@@ -114,6 +117,7 @@ public class SetRobotResponse extends BaseResponse {
         entity.setConfiguration(configuration);
         entity.setSim(sim);
         entity.setMultipleSim(multipleSim);
+        entity.setWebotsSim(webotsSim);
         entity.setNeuralNetwork(neuralNetwork);
         entity.setConnection(connection);
         entity.setVendor(vendor);
@@ -188,6 +192,8 @@ public class SetRobotResponse extends BaseResponse {
                     setSim(jsonO.getBoolean(key));
                 } else if ( "multipleSim".equals(key) ) {
                     setMultipleSim(jsonO.getBoolean(key));
+                } else if ( "webotsSim".equals(key) ) {
+                    setWebotsSim(jsonO.getBoolean(key));
                 } else if ( "neuralNetwork".equals(key) ) {
                     setNeuralNetwork(jsonO.optBoolean(key));
                 } else if ( "connection".equals(key) ) {
@@ -266,6 +272,9 @@ public class SetRobotResponse extends BaseResponse {
         }
         if ( !multipleSimDefined ) {
             _message = "required property multipleSim of SetRobotResponse-object is not set: " + toString();
+        }
+        if ( !webotsSimDefined ) {
+            _message = "required property webotsSim of SetRobotResponse-object is not set: " + toString();
         }
         if ( connection == null ) {
             _message = "required property connection of SetRobotResponse-object is not set: " + toString();
@@ -399,6 +408,27 @@ public class SetRobotResponse extends BaseResponse {
         return this;
     }
 
+    /**
+     * GET webotsSim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getWebotsSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no webotsSim from an object under construction: " + toString());
+        }
+        return this.webotsSim;
+    }
+
+    /**
+     * SET webotsSim. Object must be mutable.
+     */
+    public SetRobotResponse setWebotsSim(boolean webotsSim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("webotsSim assigned to an immutable object: " + toString());
+        }
+        this.webotsSim = webotsSim;
+        this.webotsSimDefined = true;
+        return this;
+    }
     /**
      * GET neuralNetwork. Object must be immutable. Never return null or an undefined/default value.
      */
@@ -707,6 +737,7 @@ public class SetRobotResponse extends BaseResponse {
             jsonO.put("configuration", this.configuration);
             jsonO.put("sim", this.sim);
             jsonO.put("multipleSim", this.multipleSim);
+            jsonO.put("webotsSim", this.webotsSim);
             if ( this.neuralNetworkDefined ) {
                 jsonO.put("neuralNetwork", this.neuralNetwork);
             }
@@ -779,7 +810,7 @@ public class SetRobotResponse extends BaseResponse {
             + this.sim
             + ", multipleSim="
             + this.multipleSim
-            + ", neuralNetwork="
+            + ", webotsSim=" + this.webotsSim + ", neuralNetwork="
             + this.neuralNetwork
             + ", connection="
             + this.connection
