@@ -399,7 +399,6 @@ public class ClientProgramController {
             if ( !Util.isValidJavaIdentifier(programName) ) {
                 programName = "NEPOprog";
             }
-            System.out.println(xmlText);
             String transformedXml = xsltTransformer.transform(xmlText);
             Export jaxbImportExport;
             try {

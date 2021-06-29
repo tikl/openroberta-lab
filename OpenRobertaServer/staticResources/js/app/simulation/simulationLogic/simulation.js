@@ -50,7 +50,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         hues: 8,
         setText: false
     });
-    var imgList = ['/js/app/simulation/simBackgrounds/elefant.png', '/js/app/simulation/simBackgrounds/ruler.svg',
+    var imgList = ['/js/app/simulation/simBackgrounds/elefant.png', '/js/app/simulation/simBackgrounds/ruler.png',
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg',
         '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/volksbot.svg',
         '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg',
@@ -1540,6 +1540,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function addMouseEvents() {
         removeMouseEvents();
+        return; // no modifiation wanted
         $("#robotLayer").on('mousedown touchstart', function(e) {
             if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
@@ -1843,6 +1844,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             return calculateShape(object);
         });
         ruler = relatives.ruler;
+        ruler.x = relatives.ruler.x * width;
+        ruler.y = relatives.ruler.y * height;
+        ruler.w = relatives.ruler.w * width;
+        ruler.h = relatives.ruler.h * height;
+        ruler.img = imgRuler;
     }
 
     function resetScene(obstacleL, colorAreaL) {

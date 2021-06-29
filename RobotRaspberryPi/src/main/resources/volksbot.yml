@@ -24,4 +24,7 @@ block:
     category: TASK
     implementor: de.fhg.iais.roberta.syntax.lang.blocksequence.raspberrypi.MainTaskSimple
     type: [ start ]
+
+configuration:
+  VOLKSBOT: [robBrick_volksbot-Brick]
     

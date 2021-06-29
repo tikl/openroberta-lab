@@ -245,7 +245,7 @@ function init() {
     }).then(function() {
         $(".pace").fadeOut(0);
         $(".cover").fadeOut(500, function() {
-            tutorialController.loadFromTutorial("volksbot1");
+            tutorialController.loadFromTutorial("volksbot1", "init");
         });
     });
 }

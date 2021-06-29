@@ -1653,8 +1653,11 @@ limitations under the License.
         </div>
     </div>
     <div class="modal fade" id="tutorialStartView" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg">grafischen
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                <audio id="startAudio">
+                    <source src="css/audio/startAudio.mp3" type="audio/mpeg">
+                </audio>
                 <div class="modal-header">
                     <h3 class="modal-title" id="tutorialStartViewTitle"></h3>
                 </div>
@@ -1662,7 +1665,7 @@ limitations under the License.
                     <span id="tutorialStartViewText">Message to show</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" id="volksbotStart" class="btn volksbot" autofocus>Start</button>
+                    <button type="button" id="volksbotStart" class="btn volksbot" autofocus>Start</button>
                     <div id="tutorialMaus" class="typcn typcn-hand"></div>
                 </div>
             </div>

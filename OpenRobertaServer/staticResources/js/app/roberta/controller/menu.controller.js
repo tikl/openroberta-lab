@@ -554,9 +554,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
             $('.navbar-fixed-top .dropdown').removeClass('open');
         });
 
-        $('#img-nepo').onWrap('click', function() {
-            $("#show-startup-message").modal("show");
-        }, 'logo was clicked');
+        // $('#img-nepo').onWrap('click', function() {
+        //     $("#show-startup-message").modal("show");
+        // }, 'logo was clicked');
 
         $('.menuGeneral').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");

@@ -76,7 +76,7 @@ import de.fhg.iais.roberta.visitor.hardware.IVolksbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class VolksbotStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IRaspberryPiVisitor<V>, IVolksbotVisitor<V> {
-    private final static int SPEED = 30;
+    private final static int SPEED = 100;
     private final static int STEP_CM = 45;
     private final static int STEP_DEGREE = 90;
     private final static int STEP_CORR_CM = 10;

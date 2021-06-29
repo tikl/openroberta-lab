@@ -1,3 +1,5 @@
+const { get } = require("jquery");
+
 define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'simulation.simulation', 'blockly', 'jquery'], function(
     exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, SIM, Blockly, $) {
 
@@ -11,9 +13,11 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     var maxCredits = [];
     var quiz = false;
     var configData = {};
-    var TIMEOUT = 30000;
+    var TIMEOUT = 25000;
     var myTimeoutID;
-    var simRunning = false;
+    var tutorialId;
+    var initTutorial;
+    var noTimeout = true;
 
     function init() {
         tutorialList = GUISTATE_C.getListOfTutorials();
@@ -32,11 +36,24 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
         });
     }
 
-    function loadFromTutorial(tutId) {
+    function loadFromTutorial(tutId, opt_init) {
         // initialize this tutorial
+        if (opt_init) {
+            initTutorial = tutId;
+        }
         clearTimeout(myTimeoutID);
         tutorialId = tutId;
         tutorial = tutorialList[tutId];
+        step = 0;
+        maxSteps = 0;
+        credits = [];
+        maxCredits = [];
+        quiz = false;
+        configData = {};
+        noTimeout = true;
+        myTimeoutID;
+        clearTimeout(myTimeoutID);
+        blocklyWorkspace.options.maxBlocks = null;
         if (tutorial) {
             ROBOT_C.switchRobot(tutorial.robot, undefined, startTutorial);
         }
@@ -88,8 +105,10 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
 
     function reloadTutorial() {
         clearTimeout(myTimeoutID);
-        window.location.reload();
-        // tutorialController.loadFromTutorial("volksbot11");
+        var i = tutorialId.slice(-1);
+        var newTutorialId = tutorialId.slice(0, tutorialId.length - 1) + (parseInt(i) + 1);
+        tutorialId = tutorialList[newTutorialId] ? newTutorialId : initTutorial;
+        tutorialController.loadFromTutorial(tutorialId);
     }
 
     function initStepEvents() {
@@ -104,89 +123,114 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 exitTutorial();
             });
         } else {
-            blocklyWorkspace.addChangeListener(function(event) {
+            blocklyWorkspace.removeChangeListener(blocklyListener);
+            blocklyWorkspace.addChangeListener(blocklyListener);
+            $('#simControl').off("simTerminated", simTerminatedListener);
+            $('#simControl').on("simTerminated", simTerminatedListener);
+        }
+    }
+
+    function blocklyListener(event) {
+        clearTimeout(myTimeoutID);
+        if (event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+            configData = SIM.exportConfigData();
+            noTimeout = true;
+            var blocks = blocklyWorkspace.getAllBlocks();
+            for (var i = 0; i < blocks.length; i++) {
+                blocks[i].setMovable(false);
+            }
+            // only allow blocks to be moved at the end of the program
+            if (blocks[blocks.length - 1].id !== event.blockId) {
+                blocklyWorkspace.getBlockById(event.blockId).dispose(true);
                 clearTimeout(myTimeoutID);
-                if (event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
-                    simRunning = true;
-                    clearTimeout(myTimeoutID);
-                    configData = SIM.exportConfigData();
-                    setTimeout(function() {
-                        $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-hand").addClass("typcn-eye-outline").fadeIn(550);
-                        });
-                        var blocks = blocklyWorkspace.getAllBlocks();
-                        for (var i = 1; i < blocks.length; i++) {
-                            // blocks[i].setDisabled(true);
-                            blocks[i].setMovable(false);
-                        }
-                        Blockly.hideChaff();
-                        $(".blocklyWorkspace>.blocklyFlyout").fadeOut();
-                        $('#simControl').trigger("click");
-                    }, 500);
-                } else if (!simRunning) {
-                    myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
-                }
-            });
-            $('#simControl').on("simTerminated", function() {
+                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+                return;
+            }
+            setTimeout(function() {
+                clearTimeout(myTimeoutID);
+                // $("#state").fadeOut(550, function() {
+                //     $("#state").removeClass("typcn-hand").addClass("typcn-eye-outline").fadeIn(550);
+                // });
+                Blockly.hideChaff();
+                $(".blocklyWorkspace>.blocklyFlyout").fadeOut();
+                $('#simControl').trigger("click");
+            }, 500);
+        } else if (!noTimeout) {
+            clearTimeout(myTimeoutID);
+            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+        }
+
+    };
+
+    function simTerminatedListener() {
+        var blocks = blocklyWorkspace.getAllBlocks();
+        if (checkSolutionCorrect(blocks)) {
+            if (step + 1 >= maxSteps) {
+                clearTimeout(myTimeoutID);
                 var blocks = blocklyWorkspace.getAllBlocks();
-                if (step + 1 >= maxSteps) {
-                    var blocks = blocklyWorkspace.getAllBlocks();
-                    for (var i = 0; i < blocks.length; i++) {
-                        blocks[i].setDisabled(false);
-                        blocks[i].setMovable(false);
-                    }
-                    $("#volksbotStart").one("click", function() {
+                for (var i = 0; i < blocks.length; i++) {
+                    blocks[i].setDisabled(false);
+                    blocks[i].setMovable(false);
+                }
+                $("#volksbotStart").one("click", function() {
+                    setTimeout(function() {
                         $("#menuRunProg").trigger("click");
-                    })
-                    $("#tutorialStartViewText").html(tutorial.end);
+                        $("#tutorialStartView .modal-dialog").hide();
+                    }, 1000);
+                })
+                $("#tutorialStartViewText").html(tutorial.end);
+                $('#tutorialStartView').one("hidden.bs.modal", function(e) {
+                    reloadTutorial();
+                    return;
+                });
+                setTimeout(function() {
                     $('#tutorialStartView').modal({
                         backdrop: 'static',
                         keyboard: false,
                         show: true
                     });
-                    $('#tutorialStartView').one("hidden.bs.modal", function(e) {
-                        reloadTutorial();
-                    })
-                    return;
+                })
+            } else {
+                for (var i = 1; i < blocks.length; i++) {
+                    blocks[i].setDisabled(true);
                 }
-                if (checkSolutionCorrect(blocks)) {
-                    for (var i = 1; i < blocks.length; i++) {
-                        blocks[i].setDisabled(true);
-                        //blocks[i].setMovable(false);
-                    }
-                    setTimeout(function() {
-                        $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
-                        });
-                        Blockly.hideChaff();
-                        $(".blocklyWorkspace>.blocklyFlyout").fadeIn(function() {
-                            nextStep();
-                        });
-                    }, 500);
+                setTimeout(function() {
+                    // $("#state").fadeOut(550, function() {
+                    //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
+                    // });
+                    Blockly.hideChaff();
+                    $(".blocklyWorkspace>.blocklyFlyout").fadeIn(function() {
+                        nextStep();
+                    });
+                    clearTimeout(myTimeoutID);
+                    myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+                    noTimeout = false;
+                }, 500);
+            }
+        } else {
+            setTimeout(function() {
+                SIM.loadConfigData(configData);
+                var blocks = blocklyWorkspace.getAllBlocks();
+                var toDelete = 1;
+                if (tutorial.step[step - 1]) {
+                    toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
                 } else {
-                    SIM.loadConfigData(configData);
-                    setTimeout(function() {
-                        var blocks = blocklyWorkspace.getAllBlocks();
-                        var toDelete = 1;
-                        if (tutorial.step[step - 1]) {
-                            toDelete = blocks.length - tutorial.step[step - 1].maxBlocks;
-                        } else {
-                            toDelete = blocks.length - 1; // start block always stays
-                        }
-                        for (i = 0; i < toDelete; i++) {
-                            blocks[blocks.length - 1].dispose(false, true);
-                            blocks = blocklyWorkspace.getAllBlocks();
-                        }
-                        $("#state").fadeOut(550, function() {
-                            $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
-                        });
-                        Blockly.hideChaff();
-                        $(".blocklyWorkspace>.blocklyFlyout").fadeIn();
-                    }, i * 200);
+                    toDelete = blocks.length - 1; // start block always stays
                 }
-            });
+                for (i = 0; i < toDelete; i++) {
+                    blocks[blocks.length - 1].dispose(false, true);
+                    blocks = blocklyWorkspace.getAllBlocks();
+                }
+                // $("#state").fadeOut(550, function() {
+                //     $("#state").removeClass("typcn-eye-outline").addClass("typcn-hand").fadeIn(550);
+                // });
+                Blockly.hideChaff();
+                $(".blocklyWorkspace>.blocklyFlyout").fadeIn();
+                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+                noTimeout = false;
+            }, 500);
         }
-    }
+    };
 
     function checkSolutionCorrect(blocks) {
         if (tutorial.step[step].solution) {
@@ -224,17 +268,33 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 show: true
             });
         } else if (tutorial.startView) {
+            $("#tutorialStartView .modal-dialog").show();
             $("#tutorialStartViewText").html(tutorial.startView);
-            $('#tutorialStartView').one("hidden.bs.modal", function(e) {
+            $("#volksbotStart").prop('disabled', false);
+            $("#volksbotStart").one("click", function() {
                 clearTimeout(myTimeoutID);
-                myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
-            })
+                $('#startAudio').one('ended', audioEnd);
+                $("#volksbotStart").prop('disabled', true);
+                $("#startAudio")[0].play();
+                return;
+            });
+            clearTimeout(myTimeoutID);
             $('#tutorialStartView').modal({
                 backdrop: 'static',
                 keyboard: false,
                 show: true
             });
         }
+    }
+
+    function audioEnd() {
+        setTimeout(function() {
+            $("#volksbotStart").prop('disabled', false);
+            $('#tutorialStartView').modal("hide");
+            clearTimeout(myTimeoutID);
+            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+        }, 500);
+
     }
 
     function createInstruction() {

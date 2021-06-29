@@ -13,7 +13,7 @@ NodeID_1 = 1
 NodeID_2 = 2
 
 SPEED = 1000
-BLOCKED = 1500
+BLOCKED = 1750
 
 ret = 0
 pErrorCode1 = c_uint()

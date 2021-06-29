@@ -198,7 +198,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             GUISTATE_C.setConnectionState("wait");
             $("#volksbotStart").prop('disabled', false);
             $('#tutorialStartView').modal("hide");
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+            //MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
 
