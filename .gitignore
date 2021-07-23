@@ -22,3 +22,6 @@ OpenRobertaServer/db-*
 dbIptoCountry/
 **/notifications.json
 **/data/test/output/*
+/OpenRobertaServer/staticResources/blockly/js/
+/OpenRobertaServer/staticResources/blockly/json
+/OpenRobertaServer/staticResources/blockly

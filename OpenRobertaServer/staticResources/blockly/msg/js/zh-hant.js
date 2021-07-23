@@ -1243,6 +1243,7 @@ Blockly.Msg.PORT_INTERNAL = "Port internal";  // untranslated
 Blockly.Msg.PORT_KNEE = "膝蓋";
 Blockly.Msg.PORT_SHOULDER = "肩膀";
 Blockly.Msg.PORT_WRIST = "手腕";
+Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "表示電位計。";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "允許語句";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "與：";

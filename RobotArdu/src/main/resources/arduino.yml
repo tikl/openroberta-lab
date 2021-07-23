@@ -35,12 +35,16 @@ block:
       type: [bob3Actions_recall]
   BOB3_RGB_LED_ON:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction
       type: [makeblockActions_leds_on]
   BOB3_RGB_LED_OFF:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction
       type: [makeblockActions_leds_off]
+  FESTOBIONIC_STEPMOTOR:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction
+      type: [festobionicActions_stepmotor]
   #MBOT
   ARDU_JOYSTICK_GETSAMPLE:
       category: SENSOR
