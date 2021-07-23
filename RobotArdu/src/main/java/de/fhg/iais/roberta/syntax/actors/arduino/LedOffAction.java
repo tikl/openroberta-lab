@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.actors.arduino.bob3;
+package de.fhg.iais.roberta.syntax.actors.arduino;
 
 import java.util.List;
 

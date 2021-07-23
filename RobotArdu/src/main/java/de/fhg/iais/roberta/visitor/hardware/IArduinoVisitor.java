@@ -3,6 +3,9 @@ package de.fhg.iais.roberta.visitor.hardware;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -45,7 +48,6 @@ public interface IArduinoVisitor<V>
         throw new DbcException("Block is not implemented!");
     }
 
-
     @Override
     default V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         throw new DbcException("Not supported!");
@@ -59,6 +61,18 @@ public interface IArduinoVisitor<V>
     @Override
     default V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         throw new DbcException("Not supported!");
+    }
+    
+    default V visitLedOffAction(LedOffAction<V> ledOffAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitLedOnAction(LedOnAction<V> ledOnAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    	throw new DbcException("Block is not implemented!");
     }
 
 }
