@@ -40,6 +40,10 @@ public class ArduinoCompilerWorker implements IWorker {
         String mmcu = "";
         String arduinoVariant = "";
         String arduinoArch = "";
+        String cmd = "";
+        String cmdopt1 = "";
+        String cmdopt2 = "";
+        String cmdopt3 = "";
 
         switch ( project.getRobot() ) {
             case "uno":
@@ -89,7 +93,16 @@ public class ArduinoCompilerWorker implements IWorker {
             case "festobionic":
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                mmcu = "NOTUSED";
+                cmd = "cmd.exe";
+                //cmd = "ps.exe";
+                cmdopt1 = "/c";
+                cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
+                //scriptName =
+                //    "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
+                //scriptName = "cmd.exe /c git-bash " + "/c/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/" + "arduino-resources/build_project_festobionic.sh";
+                //*orig** scriptName = "compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                //scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.bat";
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
@@ -107,7 +120,9 @@ public class ArduinoCompilerWorker implements IWorker {
 
         String[] executableWithParameters =
             {
-                scriptName,
+                cmd,
+                cmdopt1,
+                cmdopt2,
                 boardVariant,
                 mmcu,
                 arduinoVariant,
@@ -117,6 +132,15 @@ public class ArduinoCompilerWorker implements IWorker {
                 project.getRobot(),
                 arduinoArch
             };
+        //        LOG
+        //            .info(
+        //                "********* Parameter ******** %s %s %s %s %s %s",
+        //                executableWithParameters[0],
+        //                executableWithParameters[1],
+        //                executableWithParameters[2],
+        //                executableWithParameters[3],
+        //                executableWithParameters[4],
+        //                executableWithParameters[5]);
         Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
