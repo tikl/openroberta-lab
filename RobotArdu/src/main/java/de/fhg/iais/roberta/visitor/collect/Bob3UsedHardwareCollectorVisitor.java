@@ -6,9 +6,9 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
