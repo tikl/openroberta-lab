@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
@@ -30,7 +30,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.hardware.INIBOVisitor;
 
 /**
- * This class is implementing {@link INIBOVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
+ * This class is implementing {@link INIBOVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
+ * StringBuilder.
  * The Visitor class <b>has to be extended</b> by NIBO robots {@link Bob3CppVisitor} and {@link Rob3rtaCppVisitor}.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */

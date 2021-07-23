@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,8 @@ public class ArduinoCompilerWorker implements IWorker {
         String mmcu = "";
         String arduinoVariant = "";
         String arduinoArch = "";
+        String cmd = "";
+        String cmdopt1 = "";
 
         switch ( project.getRobot() ) {
             case "uno":
@@ -92,9 +95,15 @@ public class ArduinoCompilerWorker implements IWorker {
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_rob3rta.sh";
                 break;
             case "festobionic":
+            case "festobionicflower":
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                mmcu = "NOTUSED";
+                if ( SystemUtils.IS_OS_WINDOWS ) {
+                    cmd = "cmd.exe ";
+                    cmdopt1 = "/c ";
+                }
+                scriptName = compilerResourcesDir + "arduino-resources/build_project_" + project.getRobot() + ".sh";
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
@@ -110,6 +119,21 @@ public class ArduinoCompilerWorker implements IWorker {
         String sourceDir = tempDir + token + "/" + programName + "/source/";
         String targetDir = tempDir + token + "/" + programName + "/target/";
 
+        String[] executableWithParametersWin =
+            {
+                cmd,
+                cmdopt1,
+                scriptName,
+                boardVariant,
+                mmcu,
+                arduinoVariant,
+                sourceDir,
+                programName,
+                compilerResourcesDir,
+                project.getRobot(),
+                arduinoArch
+            };
+
         String[] executableWithParameters =
             {
                 scriptName,
@@ -122,7 +146,17 @@ public class ArduinoCompilerWorker implements IWorker {
                 project.getRobot(),
                 arduinoArch
             };
-        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
+
+        //Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        //System.out.println("************** Script:" + scriptName);
+
+        Pair<Boolean, String> result;
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            result = Util.runCrossCompiler(executableWithParametersWin, crosscompilerSource, project.isNativeEditorCode());
+        } else {
+            result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
+        }
+
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             String base64EncodedHex = null, optHexPrefix = null;
