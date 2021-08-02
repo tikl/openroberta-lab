@@ -1843,7 +1843,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         colorAreaList = relatives.colorAreas.map(function(object) {
             return calculateShape(object);
         });
-        ruler = relatives.ruler;
         ruler.x = relatives.ruler.x * width;
         ruler.y = relatives.ruler.y * height;
         ruler.w = relatives.ruler.w * width;

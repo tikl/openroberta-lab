@@ -521,7 +521,7 @@ define({
 
     // MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
 
-    ENC: 360.0 / (3.0 * Math.PI * 5.6),
+    ENC: 360.0 / (3.0 * Math.PI * 12),
 
     MAX_WIDTH: 2000,
 

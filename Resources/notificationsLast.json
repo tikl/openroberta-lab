@@ -1,0 +1,183 @@
+[
+	{
+		"once": true,
+		"handlers": [
+			{
+				"elementMarker": {
+					"htmlId": "simButton",
+					"content": {
+						"de": "Neu",
+						"en": "New"
+					}
+				}
+			},
+			{
+				"elementMarker": {
+					"htmlId": "simDebugButton",
+					"content": {
+						"de": "Neu",
+						"en": "New"
+					}
+				}
+			},
+			{
+				"elementMarker": {
+					"htmlId": "simEditButtons",
+					"content": {
+						"de": "Neu",
+						"en": "New"
+					}
+				}
+			},
+			{
+				"triggers": [
+					{
+						"htmlId": "simDebugButton",
+						"event": "click"
+					}
+				],
+				"elementMarker": {
+					"htmlId": "simButtons",
+					"content": {
+						"de": "Neu",
+						"en": "New"
+					}
+				}
+			}
+		]
+	},
+	{
+		"once": true,
+		"handlers": [
+			{
+				"popupNotification": {
+					"time": 3600000,
+					"title": {
+						"de": "Neue Funktionen in der Simulation :-)",
+						"en": "New Functions in the Simulation :-)"
+					},
+					"content": {
+						"de": "Mehrere Hindernisse hinzufügen oder Farbflächen für deine Simulation erstellen? Kein Problem! Schaue dich oben in der Button-Leiste um, du kannst dort<ul><li>durch die Hintergrundbilder wechseln,</li><li>eigene Hintergrundbilder hochladen,</li><li>deine Simulationseinstellungen herunterladen,</li><li>deine Simulationseinstellungen hochladen</li><li><b>Hindernisse hinzufügen,</b></li><li><b>Farbflächen hinzufügen,</b></li><li>Hindernisse/Farbflächen färben,</li><li>Hindernisse/Farbflächen löschen.</li></ul>Klicke auf den Debug-Käfer um in den Debug-Modus zu kommen und dein Programm genauer zu untersuchen.",
+						"en": "Add multiple obstacles or create color areas for your simulation? No problem! Look at the top of the button bar, you can<ul><li>switch through the background images,</li><li>upload your own background images,</li><li>download your simulation settings,</li><li>upload your simulation settings</li><li><b>add obstacles, </b></li><li><b>add color areas,</b></li><li>color obstacles/color areas,</li><li>delete obstacles/color areas.</li></ul>Click on the debug beetle to enter debug mode and examine your program in more detail."
+					}
+				}
+			}
+		],
+		"triggers": [
+			{
+				"htmlId": "simButton",
+				"event": "click",
+				"conditions": [
+					{
+						"anyOf": [
+							"ev3",
+							"nxt",
+							"mbot"
+						],
+						"guiModel": "robotGroup"
+					}
+				]
+			}
+		]
+	},
+	{
+		"once": true,
+		"handlers": [
+			{
+				"popupNotification": {
+					"time": 3600000,
+					"title": {
+						"de": "Neue Funktionen in der Simulation :-)",
+						"en": "New Functions in the Simulation :-)"
+					},
+					"content": {
+						"de": "Mehrere Hindernisse hinzufügen oder Farbflächen für deine Simulation erstellen? Kein Problem! Schaue dich oben in der Button-Leiste um, du kannst dort<ul><li>durch die Hintergrundbilder wechseln,</li><li>eigene Hintergrundbilder hochladen,</li><li>deine Simulationseinstellungen herunterladen,</li><li>deine Simulationseinstellungen hochladen</li><li><b>Hindernisse hinzufügen,</b></li><li><b>Farbflächen hinzufügen,</b></li><li>Hindernisse/Farbflächen färben,</li><li>Hindernisse/Farbflächen löschen.</li></ul>Klicke auf den SIM Button um den Debug-Modus zu verlassen und die Simulation normal ablaufen zu lassen.",
+						"en": "Add multiple obstacles or create color areas for your simulation? No problem! Look at the top of the button bar, you can<ul><li>switch through the background images,</li><li>upload your own background images,</li><li>download your simulation settings,</li><li>upload your simulation settings</li><li><b>add obstacles, </b></li><li><b>add color areas,</b></li><li>color obstacles/color areas,</li><li>delete obstacles/color areas.</li></ul>Click the SIM button to exit debug mode and run the simulation normally."
+					}
+				}
+			}
+		],
+		"triggers": [
+			{
+				"htmlId": "simDebugButton",
+				"event": "click",
+				"conditions": [
+					{
+						"anyOf": [
+							"ev3",
+							"nxt",
+							"mbot"
+						],
+						"guiModel": "robotGroup"
+					}
+				]
+			}
+		]
+	},
+	{
+		"once": true,
+		"handlers": [
+			{
+				"popupNotification": {
+					"time": 3600000,
+					"title": {
+						"de": "Simulation pur, ohne Debug Funktion",
+						"en": "Pure Simulation, without Debug Function"
+					},
+					"content": {
+						"de": "Klicke auf den Debug-Käfer um in den Debug-Modus zu kommen und dein Programm genauer zu untersuchen.",
+						"en": "Click on the debug bug to enter debug mode and examine your program more closely."
+					}
+				}
+			}
+		],
+		"triggers": [
+			{
+				"htmlId": "simButton",
+				"event": "click",
+				"conditions": [
+					{
+						"anyOf": [
+							"calliope",
+							"microbit"
+						],
+						"guiModel": "robotGroup"
+					}
+				]
+			}
+		]
+	},
+	{
+		"once": true,
+		"handlers": [
+			{
+				"popupNotification": {
+					"time": 3600000,
+					"title": {
+						"de": "Debug-Modus für die Simulation",
+						"en": "Debug Mode for the Simulation"
+					},
+					"content": {
+						"de": "Klicke auf den SIM Button um den Debug-Modus zu verlassen und die Simulation normal ablaufen zu lassen.",
+						"en": "Click on the SIM button to exit the debug mode and run the simulation normally."
+					}
+				}
+			}
+		],
+		"triggers": [
+			{
+				"htmlId": "simDebugButton",
+				"event": "click",
+				"conditions": [
+					{
+						"anyOf": [
+							"calliope",
+							"microbit"
+						],
+						"guiModel": "robotGroup"
+					}
+				]
+			}
+		]
+	}
+]

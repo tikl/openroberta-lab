@@ -191,6 +191,7 @@ public class ClientInit {
                 JSONObject jsonObjInDirectory = new JSONObject(Util.readFileContent(file.getAbsolutePath()));
                 jsonObjRepresentingTheDirectory.put(file.getName().replaceFirst("[.][^.]+$", "").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
             } catch ( Exception e ) {
+                System.out.println(e);
                 // no problem, we simply ignore files without valid json data
             }
         }

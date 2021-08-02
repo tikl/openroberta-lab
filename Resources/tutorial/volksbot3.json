@@ -1,5 +1,5 @@
 {
-    "name": "Hallo",
+    "name": "volksbot3",
     "language": "DE",
     "robot": "volksbot",
     "sim": "sim",
@@ -8,7 +8,7 @@
     "index": 100,
     "time": "30 min",
     "age": "ab 8 Jahre",
-    "startView": "<video width='80px' style='border: 2px solid black;' loop='loop' autoplay='' playsinline='' muted=''><source src='css/img/VolksbotIntro.mp4' type='video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"' /></video>",
+    "startView": "<video id='startVideo' width='500px' style='border: 2px solid black;' autoplay='' playsinline='' muted=''><source src='css/img/VolksbotIntro.mp4' type='video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"' /></video>",
     "initXML": "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"200\" y=\"50\"><block type=\"start\" id=\"1\" intask=\"true\"></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"138\" y=\"88\"><block type=\"robBrick_volksbot-Brick\" id=\"1\" intask=\"true\" deletable=\"false\"><field name=\"brick_label\">RASPBERRYPI</field><field name=\"IP_ADDRESS\">192.168.0.159</field><field name=\"PORT\">22</field><field name=\"USERNAME\">pi</field><field name=\"PASSWORD\">raspberry</field></block></instance></block_set></config></export>",
     "end": "<img src='js/app/simulation/simBackgrounds/elefant.png' alt='Roboter' style='display: block; margin-left: auto; margin-right: auto; width: 350px;'>",
     "step": [{
@@ -20,7 +20,7 @@
                     "y": 0.7966708795987409,
                     "theta": 4.712388980384787,
                     "xOld": 0.2034638789202727,
-                    6 "yOld": 0.7966708795987409,
+                    "yOld": 0.7966708795987409,
                     "transX": 0,
                     "transY": 0,
                     "thetaDiff": 0

@@ -72,7 +72,7 @@ define(["require", "exports"], function(require, exports) {
     exports.DURATION = "duration";
     exports.EACH_COUNTER = "eachcounter";
     exports.ELSE_STMTS = "elseStmts";
-    exports.ENC = 360.0 / (3.0 * Math.PI * 5.6);
+    exports.ENC = 360.0 / (3.0 * Math.PI * 12);
     exports.ENCODER_SENSOR_RESET = "encoderSensorReset";
     exports.ENCODER_SENSOR_SAMPLE = "encoder";
     exports.ENTER = "enter";
@@ -153,9 +153,9 @@ define(["require", "exports"], function(require, exports) {
     exports.MAX = "max";
     exports.MAXDIAG = 2500;
     // MAXPOWER is a double expression
-    exports.MAXPOWER = 0.351858377 * 3;
+    exports.MAXPOWER = 0.7037167544 * 3;
     exports.MAX_HEIGHT = 1000;
-    exports.MAX_ROTATION = 0.5;
+    exports.MAX_ROTATION = 1;
     exports.MAX_WIDTH = 2000;
     exports.MEDIAN = "median";
     exports.METHOD_CALL = "createMethodCall";

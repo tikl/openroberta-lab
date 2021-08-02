@@ -146,6 +146,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                 setTimeout(function() {
                     GUISTATE_C.setConnectionState("wait");
                     $("#volksbotStart").prop('disabled', false);
+                    $("#specificChart").hide();
                     $('#tutorialStartView').hide();
                 }, 500);
                 GUISTATE_C.setState(result);
@@ -196,8 +197,10 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             }
         } else {
             GUISTATE_C.setConnectionState("wait");
+            $("#specificChart").hide();
             $("#volksbotStart").prop('disabled', false);
             $('#tutorialStartView').modal("hide");
+
             //MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }

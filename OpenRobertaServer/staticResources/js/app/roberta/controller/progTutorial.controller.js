@@ -34,6 +34,17 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
             toggleTutorial();
             return false;
         });
+        $("#helpTutorial").on('click', function() {
+            clearTimeout(myTimeoutID);
+            $('#tutorialStartView').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+            $("#volksbotStart").prop('disabled', true);
+            $('#startVideo').one('ended', videoEnd);
+            $("#startVideo")[0].play();
+        });
     }
 
     function loadFromTutorial(tutId, opt_init) {
@@ -172,10 +183,22 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                     blocks[i].setDisabled(false);
                     blocks[i].setMovable(false);
                 }
+
+                function waitClock(t) {
+                    var tt = t - 1;
+                    if (tt >= 0) {
+                        updateDonutChart("#specificChart", 100 / 120 * (120 - tt));
+                        setTimeout(function() {
+                            waitClock(tt);
+                        }, 1000);
+                    }
+                }
                 $("#volksbotStart").one("click", function() {
                     setTimeout(function() {
                         $("#menuRunProg").trigger("click");
                         $("#tutorialStartView .modal-dialog").hide();
+                        $("#specificChart").show();
+                        waitClock(120);
                     }, 1000);
                 })
                 $("#tutorialStartViewText").html(tutorial.end);
@@ -269,8 +292,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
             });
         } else if (tutorial.startView) {
             $("#tutorialStartView .modal-dialog").show();
-            $("#tutorialStartViewText").html(tutorial.startView);
-            $("#volksbotStart").prop('disabled', false);
+            $("#tutorialStartViewText").html("<img width='250px' src='css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png' alt='Die Maus'>");
             $("#volksbotStart").one("click", function() {
                 clearTimeout(myTimeoutID);
                 $('#startAudio').one('ended', audioEnd);
@@ -289,12 +311,18 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
 
     function audioEnd() {
         setTimeout(function() {
-            $("#volksbotStart").prop('disabled', false);
-            $('#tutorialStartView').modal("hide");
-            clearTimeout(myTimeoutID);
-            myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
+            $('#tutorialStartViewText').hide().html(tutorial.startView).fadeIn('slow');
+            $('#startVideo').one('ended', videoEnd);
+            $("#startVideo")[0].play();
         }, 500);
 
+    }
+
+    function videoEnd() {
+        $("#volksbotStart").prop('disabled', false);
+        $('#tutorialStartView').modal("hide");
+        clearTimeout(myTimeoutID);
+        myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
     }
 
     function createInstruction() {
@@ -584,5 +612,27 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         Blockly.mainWorkspace.options.maxBlocks = undefined;
         $('#tabTutorialList').trigger('click');
+    }
+
+    function updateDonutChart(el, percent) {
+        percent = Math.round(percent);
+        if (percent > 100) {
+            percent = 100;
+        } else if (percent < 0) {
+            percent = 0;
+        }
+        var deg = Math.round(360 * (percent / 100));
+
+        if (percent > 50) {
+            $(el + ' .pie').css('clip', 'rect(auto, auto, auto, auto)');
+            $(el + ' .right-side').css('transform', 'rotate(180deg)');
+        } else {
+            $(el + ' .pie').css('clip', 'rect(0,1em, 1em, 0.5em)');
+            $(el + ' .right-side').css('transform', 'rotate(0deg)');
+        }
+        $(el + ' .right-side').css('border-width', '0.5em');
+        $(el + ' .left-side').css('border-width', '0.5em');
+        $(el + ' .shadow').css('border-width', '0.5em');
+        $(el + ' .left-side').css('transform', 'rotate(' + deg + 'deg)');
     }
 });

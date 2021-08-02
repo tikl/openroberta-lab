@@ -14,7 +14,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         Ev3.call(this, pose, configuration, num, robotBehaviour);
         this.trackwidth = 120;
         this.wheelDiameter = 12;
-        this.maxRotations = 0.5;
+        this.maxRotations = 1;
         this.maxPower = this.wheelDiameter * Math.PI * this.maxRotations * 0.03;
         this.img = img;
         this.geom = {

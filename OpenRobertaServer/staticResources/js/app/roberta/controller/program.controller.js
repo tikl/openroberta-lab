@@ -26,7 +26,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'rob
             path: '/blockly/',
             toolbox: toolbox,
             trashcan: true,
-            scrollbars: true,
+            scrollbars: false,
             media: '../blockly/media/',
             zoom: {
                 controls: true,
