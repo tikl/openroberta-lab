@@ -18,6 +18,8 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -108,6 +110,38 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         nlIndent();
         return null;
     }
+    
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+//        this.sb.append("rob.setLed(");
+//        if ( ledOnAction.getSide().equals("Left") ) {
+//            this.sb.append("EYE_2, ");
+//        } else {
+//            this.sb.append("EYE_1, ");
+//        }
+//        ledOnAction.getLedColor().accept(this);
+//        this.sb.append(");");
+        
+        this.sb.append("set_color(C");
+        ledOnAction.getLedColor().accept(this);
+        this.sb.append(");");
+        
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        this.sb.append("rob.setLed(");
+        if ( ledOffAction.getSide().equals("Left") ) {
+            this.sb.append("EYE_2, OFF);");
+        } else {
+            this.sb.append("EYE_1, OFF);");
+        }
+        return null;
+    }
+    
+    
+    
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
@@ -119,6 +153,10 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         this.sb.append("#define _ARDUINO_STL_NOT_NEEDED"); // TODO remove negation and thus double negation in NEPODEFS.h, maybe define when necessary
         nlIndent();
         this.sb.append("#define LED_BUILTIN 13");
+        nlIndent();
+        this.sb.append("#define LED_PIN 16");
+        nlIndent();
+        this.sb.append("#define NUM_LEDS 5");
         nlIndent();
         nlIndent();
         this.sb.append("#include <Arduino.h>\n");
@@ -132,6 +170,10 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     headerFiles.add("#include <ESP32Servo/src/ESP32Servo.h>");
                     break;
                 case SC.LED:
+                    break;
+                case SC.RGBLED:
+                	this.sb.append("#include <FastLED.h>");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
@@ -150,6 +192,10 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.LED:
                     this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                    nlIndent();
+                    break;
+                case SC.RGBLED:
+                    this.sb.append("FastLED.addLeds<NEOPIXEL,LED_PIN>(leds,NUM_LEDS);");
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
@@ -173,6 +219,28 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
             switch ( cc.getComponentType() ) {
                 case SC.LED:
                     this.sb.append("int _led_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                    nlIndent();
+                    break;
+                case SC.RGBLED:
+                    this.sb.append("CRGB leds[NUM_LEDS];");
+                    nlIndent();
+                    nlIndent();
+                    this.sb.append("void set_color(CRGB color)");
+                    nlIndent();
+                    this.sb.append("{");
+                    nlIndent();
+                    this.sb.append("  for (int i = 0; i < NUM_LEDS; i++))");
+                    nlIndent();
+                    this.sb.append("  {");
+                    nlIndent();
+                    this.sb.append("    leds[i] = CRGB(255,0,0);");
+                    nlIndent();
+                    this.sb.append("  }");
+                    nlIndent();
+                    this.sb.append("  FastLED.show();");
+                    nlIndent();
+                    this.sb.append("}");
+                    nlIndent();
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
