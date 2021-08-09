@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -203,6 +205,17 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
 
     @Override
     default Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
+        return null;
+    }
+    
+    @Override
+    default Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        return null;
+    }
+
+    @Override
+    default Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        ledOnAction.getLedColor().accept(this);
         return null;
     }
 }

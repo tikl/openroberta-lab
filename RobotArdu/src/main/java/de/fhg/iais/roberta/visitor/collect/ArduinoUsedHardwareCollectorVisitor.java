@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData;
@@ -181,6 +183,14 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     @Override
     public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
         nn.probabilities.accept(this);
+        return null;
+    }
+    
+   public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         return null;
     }
 }
