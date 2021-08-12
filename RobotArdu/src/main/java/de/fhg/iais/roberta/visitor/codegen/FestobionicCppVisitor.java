@@ -161,7 +161,11 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         nlIndent();
         this.sb.append("#include <Arduino.h>\n");
         nlIndent();
+        this.sb.append("#define RGB _RGB\n");
+        nlIndent();
         this.sb.append("#include <NEPODefs.h>");
+        nlIndent();
+        this.sb.append("#undef RGB\n");
         nlIndent();
         Set<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -229,11 +233,11 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     nlIndent();
                     this.sb.append("{");
                     nlIndent();
-                    this.sb.append("  for (int i = 0; i < NUM_LEDS; i++))");
+                    this.sb.append("  for (int i = 0; i < NUM_LEDS; i++)");
                     nlIndent();
                     this.sb.append("  {");
                     nlIndent();
-                    this.sb.append("    leds[i] = CRGB(255,0,0);");
+                    this.sb.append("    leds[i] = color;");
                     nlIndent();
                     this.sb.append("  }");
                     nlIndent();
