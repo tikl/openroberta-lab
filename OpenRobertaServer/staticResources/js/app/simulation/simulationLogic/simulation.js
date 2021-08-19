@@ -1781,7 +1781,12 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         relatives.colorAreas = colorAreaList.map(function(object) {
             return calculateShape(object);
         });
-        relatives.ruler = ruler;
+        relatives.ruler = {};
+        relatives.ruler.x = ruler.x / width;
+        relatives.ruler.y = ruler.y / height;
+        relatives.ruler.w = ruler.w / width;
+        relatives.ruler.h = ruler.h / height;
+        relatives.ruler.img = imgRuler;
         return relatives;
     }
 

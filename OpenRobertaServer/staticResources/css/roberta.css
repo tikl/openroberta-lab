@@ -3287,6 +3287,7 @@ animation: blinkingForeground 1.2s infinite;
 }
 .blocklyFlyoutBackground {
     fill: #ffa300;
+    opacity: 0.45;
 }
 #simEditButtons,
 .container-fluid,
@@ -3421,4 +3422,12 @@ animation: blinkingForeground 1.2s infinite;
     height: 100%;
     border: 0.1em solid #44b59d;
     border-radius: 50%;
+}
+path.blocklyPath.dummyBlock {
+    stroke: #FA8200;
+    stroke-width: 3px;
+    /* stroke-width: 4px; */
+    
+    fill: #fff4e0;
+    /* paint-order: stroke; */
 }

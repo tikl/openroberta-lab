@@ -41,7 +41,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 keyboard: false,
                 show: true
             });
-            $("#volksbotStart").prop('disabled', true);
+            $("#volksbotStart").hide("slow"); //prop('disabled', true);
             $('#startVideo').one('ended', videoEnd);
             $("#startVideo")[0].play();
         });
@@ -110,6 +110,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 openTutorialView();
             }
             showOverview();
+            //videoEnd();
         }
     }
     exports.loadFromTutorial = loadFromTutorial;
@@ -125,6 +126,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     function initStepEvents() {
         if (tutorial.instructions) {
             $("#tutorial-list.nav li.step a").on("click", function() {
+                ckly
                 Blockly.hideChaff();
                 step = $(this).text() - 2;
                 nextStep();
@@ -143,7 +145,8 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
 
     function blocklyListener(event) {
         clearTimeout(myTimeoutID);
-        if (event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+        if (event.blockId !== "step_dummy" && event.newParentId && blocklyWorkspace.remainingCapacity() == 0) {
+
             configData = SIM.exportConfigData();
             noTimeout = true;
             var blocks = blocklyWorkspace.getAllBlocks();
@@ -151,17 +154,14 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                 blocks[i].setMovable(false);
             }
             // only allow blocks to be moved at the end of the program
-            if (blocks[blocks.length - 1].id !== event.blockId) {
-                blocklyWorkspace.getBlockById(event.blockId).dispose(true);
+            if (blocks[blocks.length - 2].id !== event.blockId) {
+                blocklyWorkspace.getBlockById(event.blockId).dispose(true, true);
                 clearTimeout(myTimeoutID);
                 myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);
                 return;
             }
             setTimeout(function() {
                 clearTimeout(myTimeoutID);
-                // $("#state").fadeOut(550, function() {
-                //     $("#state").removeClass("typcn-hand").addClass("typcn-eye-outline").fadeIn(550);
-                // });
                 Blockly.hideChaff();
                 $(".blocklyWorkspace>.blocklyFlyout").fadeOut();
                 $('#simControl').trigger("click");
@@ -179,7 +179,8 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
             if (step + 1 >= maxSteps) {
                 clearTimeout(myTimeoutID);
                 var blocks = blocklyWorkspace.getAllBlocks();
-                for (var i = 0; i < blocks.length; i++) {
+                blocks[blocks.length - 1].dispose(false, true);
+                for (var i = 0; i < blocks.length - 1; i++) {
                     blocks[i].setDisabled(false);
                     blocks[i].setMovable(false);
                 }
@@ -214,6 +215,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                     });
                 })
             } else {
+                // delete last dummy block from program
                 for (var i = 1; i < blocks.length; i++) {
                     blocks[i].setDisabled(true);
                 }
@@ -241,7 +243,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
                     toDelete = blocks.length - 1; // start block always stays
                 }
                 for (i = 0; i < toDelete; i++) {
-                    blocks[blocks.length - 1].dispose(false, true);
+                    blocks[blocks.length - 2].dispose(true, true);
                     blocks = blocklyWorkspace.getAllBlocks();
                 }
                 // $("#state").fadeOut(550, function() {
@@ -259,8 +261,6 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
         if (tutorial.step[step].solution) {
             for (i = 0; i < tutorial.step[step].solution.length; i++) {
                 if (blocks[i + 1].type != tutorial.step[step].solution[i]) {
-                    console.log(blocks[1].type);
-                    console.log(tutorial.step[step].solution[i]);
                     return false;
                 }
             }
@@ -292,11 +292,11 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
             });
         } else if (tutorial.startView) {
             $("#tutorialStartView .modal-dialog").show();
-            $("#tutorialStartViewText").html("<img width='250px' src='css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png' alt='Die Maus'>");
+            $("#tutorialStartViewText").html("<img height='401px' src='css/img/DieMaus_KV_Museum_mit_der_Maus_RGB.png' alt='Die Maus'>");
             $("#volksbotStart").one("click", function() {
                 clearTimeout(myTimeoutID);
                 $('#startAudio').one('ended', audioEnd);
-                $("#volksbotStart").prop('disabled', true);
+                $("#volksbotStart").hide("slow"); //prop('disabled', true);
                 $("#startAudio")[0].play();
                 return;
             });
@@ -319,7 +319,7 @@ define(['exports', 'comm', 'message', 'log', 'guiState.controller', 'program.con
     }
 
     function videoEnd() {
-        $("#volksbotStart").prop('disabled', false);
+        $("#volksbotStart").show("slow"); //prop('disabled', false);
         $('#tutorialStartView').modal("hide");
         clearTimeout(myTimeoutID);
         myTimeoutID = setTimeout(reloadTutorial, TIMEOUT);

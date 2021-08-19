@@ -19,6 +19,10 @@ block:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RotateLeft
     type: [ rotate_left ]
+  STEP_DUMMY:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.Dummy
+    type: [ step_dummy ]
 
   MAIN_TASK_SIMPLE:
     category: TASK

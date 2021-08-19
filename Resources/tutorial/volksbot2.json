@@ -9,11 +9,10 @@
     "time": "30 min",
     "age": "ab 8 Jahre",
     "startView": "<video id='startVideo' width='500px' style='border: 2px solid black;' autoplay='' playsinline='' muted=''><source src='css/img/VolksbotIntro.mp4' type='video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"' /></video>",
-    "initXML": "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"200\" y=\"50\"><block type=\"start\" id=\"1\" intask=\"true\"></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"138\" y=\"88\"><block type=\"robBrick_volksbot-Brick\" id=\"1\" intask=\"true\" deletable=\"false\"><field name=\"brick_label\">RASPBERRYPI</field><field name=\"IP_ADDRESS\">192.168.0.159</field><field name=\"PORT\">22</field><field name=\"USERNAME\">pi</field><field name=\"PASSWORD\">raspberry</field></block></instance></block_set></config></export>",
+    "initXML": "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"250\" y=\"50\"><block movable=\"false\" type=\"start\" id=\"1\" intask=\"true\"></block><block id=\"step_dummy\" intask=\"true\" movable=\"false\" type=\"step_dummy\"></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"volksbot\" xmlversion=\"3.1\" description=\"\" tags=\"\"><instance x=\"138\" y=\"88\"><block type=\"robBrick_volksbot-Brick\" id=\"1\" intask=\"true\" deletable=\"false\"><field name=\"brick_label\">RASPBERRYPI</field><field name=\"IP_ADDRESS\">192.168.0.159</field><field name=\"PORT\">22</field><field name=\"USERNAME\">pi</field><field name=\"PASSWORD\">raspberry</field></block></instance></block_set></config></export>",
     "end": "<img src='js/app/simulation/simBackgrounds/elefant.png' alt='Roboter' style='display: block; margin-left: auto; margin-right: auto; width: 350px;'>",
     "step": [{
             "header": "1",
-            "program": "<block_set xmlns='http://www.w3.org/1999/xhtml' xmlversion='3.1' robottype=\"volksbot\"><instance><block type='start'></block><shadow type='step_forward'></shadow></instance></block_set>",
             "simulationSettings": {
                 "robotPoses": [{
                     "x": 0.2034638789202727,
@@ -355,7 +354,7 @@
             "solution": [
                 "step_forward"
             ],
-            "maxBlocks": 2
+            "maxBlocks": 3
         },
         {
             "header": "2",
@@ -364,7 +363,7 @@
                 "step_forward",
                 "rotate_right"
             ],
-            "maxBlocks": 3
+            "maxBlocks": 4
         },
         {
             "header": "3",
@@ -374,7 +373,7 @@
                 "rotate_right",
                 "step_forward"
             ],
-            "maxBlocks": 4
+            "maxBlocks": 5
         },
         {
             "header": "5",
@@ -385,7 +384,7 @@
                 "step_forward",
                 "step_forward"
             ],
-            "maxBlocks": 5
+            "maxBlocks": 6
         },
         {
             "header": "6",
@@ -397,7 +396,7 @@
                 "step_forward",
                 "rotate_left"
             ],
-            "maxBlocks": 6
+            "maxBlocks": 7
         },
         {
             "header": "7",
@@ -410,7 +409,7 @@
                 "rotate_left",
                 "step_forward"
             ],
-            "maxBlocks": 7
+            "maxBlocks": 8
         },
         {
             "header": "8",
@@ -424,7 +423,7 @@
                 "step_forward",
                 "step_forward"
             ],
-            "maxBlocks": 8
+            "maxBlocks": 9
         },
         {
             "header": "9",
@@ -439,7 +438,7 @@
                 "step_forward",
                 "step_forward"
             ],
-            "maxBlocks": 9
+            "maxBlocks": 10
         },
         {
             "header": "10",
@@ -455,7 +454,7 @@
                 "step_forward",
                 "rotate_right"
             ],
-            "maxBlocks": 10
+            "maxBlocks": 11
         },
         {
             "header": "11",
@@ -472,7 +471,7 @@
                 "rotate_right",
                 "step_forward"
             ],
-            "maxBlocks": 11
+            "maxBlocks": 12
         }
     ]
 }
