@@ -122,7 +122,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
 //        ledOnAction.getLedColor().accept(this);
 //        this.sb.append(");");
         
-        this.sb.append("set_color(C");
+        this.sb.append("set_color(");
         ledOnAction.getLedColor().accept(this);
         this.sb.append(");");
         
@@ -161,11 +161,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         nlIndent();
         this.sb.append("#include <Arduino.h>\n");
         nlIndent();
-        this.sb.append("#define RGB _RGB\n");
-        nlIndent();
         this.sb.append("#include <NEPODefs.h>");
-        nlIndent();
-        this.sb.append("#undef RGB\n");
         nlIndent();
         Set<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -176,7 +172,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                 case SC.LED:
                     break;
                 case SC.RGBLED:
-                	this.sb.append("#include <FastLED.h>");
+                	this.sb.append("#include <Adafruit_NeoPixel.h>");
                     nlIndent();
                     break;
                 default:
@@ -199,7 +195,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    this.sb.append("FastLED.addLeds<NEOPIXEL,LED_PIN>(leds,NUM_LEDS);");
+                    this.sb.append("pixels.begin();");
                     nlIndent();
                     break;
                 case SC.SERVOMOTOR:
@@ -226,10 +222,10 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    this.sb.append("CRGB leds[NUM_LEDS];");
+                    this.sb.append("Adafruit_NeoPixel pixels(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
                     nlIndent();
                     nlIndent();
-                    this.sb.append("void set_color(CRGB color)");
+                    this.sb.append("void set_color(uint32_t color)");
                     nlIndent();
                     this.sb.append("{");
                     nlIndent();
@@ -237,11 +233,11 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     nlIndent();
                     this.sb.append("  {");
                     nlIndent();
-                    this.sb.append("    leds[i] = color;");
+                    this.sb.append("    pixels.setPixelColor(i,color);");
                     nlIndent();
                     this.sb.append("  }");
                     nlIndent();
-                    this.sb.append("  FastLED.show();");
+                    this.sb.append("  pixels.show();");
                     nlIndent();
                     this.sb.append("}");
                     nlIndent();
