@@ -102,7 +102,7 @@ public class ArduinoCompilerWorker implements IWorker {
                 //    "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
                 //scriptName = "cmd.exe /c git-bash " + "/c/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/" + "arduino-resources/build_project_festobionic.sh";
                 //*orig** scriptName = "compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
-                //scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.bat";
+                scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
