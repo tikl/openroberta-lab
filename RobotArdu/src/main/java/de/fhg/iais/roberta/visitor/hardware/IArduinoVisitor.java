@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -69,4 +70,9 @@ public interface IArduinoVisitor<V>
     default V visitLedOnAction(LedOnAction<V> ledOnAction) {
         throw new DbcException("Block is not implemented!");
     }
+
+    default V visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    	throw new DbcException("Block is not implemented!");
+    }
+
 }

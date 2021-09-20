@@ -23,6 +23,13 @@
           </value>
       </block>
       <block type="makeblockActions_leds_off"/>
+      <block type="festobionicActions_stepmotor">
+        <value name="VALUE">
+          <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_?" intask="true">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robSensors_timer_getSample" />

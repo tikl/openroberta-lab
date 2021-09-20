@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -177,6 +178,10 @@ public interface IFestobionicVisitor<V> extends IMotorVisitor<V>, ISerialVisitor
     }
 
     default V visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    	throw new DbcException("Not supported!");
+    }
+	
+    default V visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
     	throw new DbcException("Not supported!");
     }
 }

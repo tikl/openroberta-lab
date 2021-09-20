@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData;
@@ -193,4 +194,9 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         return null;
     }
+
+    public Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+        return null;
+    }
+
 }

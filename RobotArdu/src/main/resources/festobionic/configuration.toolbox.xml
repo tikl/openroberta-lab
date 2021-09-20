@@ -3,5 +3,9 @@
         <block type="robConf_servo" />
         <block type="robConf_led" />
         <!--<block type="robConf_rgbled" />-->
+    <category name="BionicFlower" svg="true">
+        <block type="robConf_rgbled" />
+        <block type="robConf_stepmotor" />
+    </category>
     </category>
 </toolbox_set>

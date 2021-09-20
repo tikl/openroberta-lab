@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -216,6 +217,12 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
     @Override
     default Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         ledOnAction.getLedColor().accept(this);
+        return null;
+    }
+
+    @Override
+    default Void visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+    	stepMotorAction.getStepMotorPos().accept(this);
         return null;
     }
 }

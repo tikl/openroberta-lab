@@ -41,6 +41,10 @@ block:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction
       type: [makeblockActions_leds_off]
+  FESTOBIONIC_STEPMOTOR:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction
+      type: [festobionicActions_stepmotor]
   #MBOT
   ARDU_JOYSTICK_GETSAMPLE:
       category: SENSOR
