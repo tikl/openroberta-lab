@@ -855,3 +855,6 @@ configuration:
   WEDO: [robBrick_WeDo-Brick]
   WIRELESS: [robConf_wireless]
   PARTICLE: [robConf_particle]
+  STEPPER: [robConf_stepper]
+  FESTOSTEPMOTOR: [festoConf_stepmotor]
+  
