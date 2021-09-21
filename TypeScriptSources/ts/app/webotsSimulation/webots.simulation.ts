@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 
-const URL = "wss://cyberbotics1.epfl.ch/1999/session?url=file:///home/cyberbotics/webots/projects/robots/softbank/nao/worlds/nao_room.wbt";
+const URL = "wss://sim.open-roberta.org/1999/session?url=file:///home/cyberbotics/webots/projects/robots/softbank/nao/worlds/nao_room_bj.wbt";
 
 interface StreamingViewer extends HTMLElement {
     connect(url: string, mode: string, broadcast: boolean, mobileDevice: boolean, callback: Function, disconnectCallback: Function);

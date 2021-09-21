@@ -38,7 +38,7 @@ define(["require", "exports", "jquery"], function (require, exports, $) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.run = exports.stopProgram = exports.resetPose = exports.init = exports.disconnect = void 0;
-    var URL = "wss://cyberbotics1.epfl.ch/1999/session?url=file:///home/cyberbotics/webots/projects/robots/softbank/nao/worlds/nao_room.wbt";
+    var URL = "wss://sim.open-roberta.org/1999/session?url=file:///home/cyberbotics/webots/projects/robots/softbank/nao/worlds/nao_room_bj.wbt";
     var runButton = document.querySelector('#simControl');
     var resetButton = document.querySelector('#simResetPose');
     var streamingViewer;
