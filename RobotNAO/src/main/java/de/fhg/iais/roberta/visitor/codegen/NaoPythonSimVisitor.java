@@ -269,35 +269,32 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitHand(Hand<Void> hand) {
-        this.sb.append("h.hand(");
-        switch ( hand.getTurnDirection() ) {
-            case LEFT:
-                this.sb.append("\"LHand\"");
+        this.sb.append("robot.");
+        switch ( hand.getModus() ) {
+            case ACTIVE:
+                this.sb.append("open_hand(");
                 break;
-            case RIGHT:
-                this.sb.append("\"RHand\"");
+            case REST:
+                this.sb.append("close_hand(");
                 break;
         }
 
-        switch ( hand.getModus() ) {
-            case ACTIVE:
-                this.sb.append(", 1)");
+        switch ( hand.getTurnDirection() ) {
+            case LEFT:
+                this.sb.append("Hand.LEFT");
                 break;
-            case REST:
-                this.sb.append(", 2)");
-                break;
-            case SIT:
-                this.sb.append(", 3)");
-                break;
-            default:
+            case RIGHT:
+                this.sb.append("Hand.RIGHT");
                 break;
         }
+
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        this.sb.append("robot.moveJoint(");
+        this.sb.append("robot.move_joint(");
         switch ( moveJoint.getJoint() ) {
             case HEADYAW:
                 this.sb.append("\"HeadYaw\"");
@@ -385,12 +382,13 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         this.sb.append(", ");
         switch ( moveJoint.getRelativeAbsolute() ) {
             case ABSOLUTE:
-                this.sb.append("1)");
+                this.sb.append("JointMovement.ABSOLUTE");
                 break;
             case RELATIVE:
-                this.sb.append("2)");
+                this.sb.append("JointMovement.RELATIVE");
                 break;
         }
+        this.sb.append(")");
         return null;
     }
 

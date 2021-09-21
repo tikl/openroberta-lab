@@ -14,19 +14,30 @@
 
 """Example of Python controller for Nao robot.
    This demonstrates how to access sensors and actuators"""
-
-from controller import Robot, Motion, Motor, PositionSensor
 import math
+from controller import Robot, Motion, Motor, PositionSensor
+from enum import Enum
+from typing import List
 
-FORWARD_SPEED = 50 / 6.76 # cm / s
-BACKWARD_SPEED = 19.23 / 2.6 # cm / s
-TURN_SPEED = 60 / 4.5 # °/s
+FORWARD_SPEED = 50 / 6.76  # cm / s
+BACKWARD_SPEED = 19.23 / 2.6  # cm / s
+TURN_SPEED = 60 / 4.5  # °/s
 
 DELTA = 0.001
-TIMEOUT = 15 # s
+TIMEOUT = 15  # s
 
 
-class Nao (Robot):
+class Hand(Enum):
+    LEFT = 0
+    RIGHT = 1
+
+
+class JointMovement(Enum):
+    ABSOLUTE = 0
+    RELATIVE = 1
+
+
+class Nao(Robot):
     PHALANX_MAX = 8
 
     # load motion files
@@ -163,7 +174,7 @@ class Nao (Robot):
                 line = line + str(int(gray))
             print(line)
 
-    def setAllLedsColor(self, rgb):
+    def set_all_leds_color(self, rgb):
         # these leds take RGB values
         for i in range(0, len(self.leds)):
             self.leds[i].set(rgb)
@@ -173,18 +184,40 @@ class Nao (Robot):
         self.leds[5].set(rgb & 0xFF)
         self.leds[6].set(rgb & 0xFF)
 
-    def setHandsAngle(self, angle):
-        for i in range(0, self.PHALANX_MAX):
-            clampedAngle = angle
-            if clampedAngle > self.maxPhalanxMotorPosition[i]:
-                clampedAngle = self.maxPhalanxMotorPosition[i]
-            elif clampedAngle < self.minPhalanxMotorPosition[i]:
-                clampedAngle = self.minPhalanxMotorPosition[i]
+    def move_hand_joint(self, hand: Hand, radiant, mode=JointMovement.ABSOLUTE):
+        phalanx = self.rphalanx if hand == Hand.RIGHT else self.lphalanx
 
-            if len(self.rphalanx) > i and self.rphalanx[i] is not None:
-                self.rphalanx[i].setPosition(clampedAngle)
-            if len(self.lphalanx) > i and self.lphalanx[i] is not None:
-                self.lphalanx[i].setPosition(clampedAngle)
+        clamped_angles = []
+        for i in range(0, self.PHALANX_MAX):
+            sensor: PositionSensor = phalanx[i].getPositionSensor()
+
+            if (i < len(phalanx)) and phalanx[i] is not None:
+                sensor.enable(self.timeStep)
+
+            clamped_angle = radiant
+
+            if mode == JointMovement.RELATIVE:
+                clamped_angle += sensor.getValue()
+
+            clamped_angle = min(self.maxPhalanxMotorPosition[i], clamped_angle)
+            clamped_angle = max(self.minPhalanxMotorPosition[i], clamped_angle)
+
+            if len(phalanx) > i and phalanx[i] is not None:
+                phalanx[i].setPosition(clamped_angle)
+
+            clamped_angles.append(clamped_angle)
+
+        start_time = self.getTime()
+        while self.step(self.timeStep) != -1:
+            values_reached = []
+            for i in range(0, self.PHALANX_MAX):
+                sensor: PositionSensor = phalanx[i].getPositionSensor()
+                values_reached.append(math.fabs(sensor.getValue() - clamped_angles[i]) <= DELTA)
+
+            is_timeout = self.getTime() - start_time >= TIMEOUT
+            is_finished = (len([done for done in values_reached if done]) == self.PHALANX_MAX)
+            if is_finished or is_timeout:
+                break
 
     def findAndEnableDevices(self):
         # get the time step of the current world.
@@ -249,8 +282,8 @@ class Nao (Robot):
         # get phalanx motor tags
         # the real Nao has only 2 motors for RHand/LHand
         # but in Webots we must implement RHand/LHand with 2x8 motors
-        self.lphalanx = []
-        self.rphalanx = []
+        self.lphalanx: List[Motor] = []
+        self.rphalanx: List[Motor] = []
         self.maxPhalanxMotorPosition = []
         self.minPhalanxMotorPosition = []
         for i in range(0, self.PHALANX_MAX):
@@ -280,22 +313,24 @@ class Nao (Robot):
     def reset_pose(self):
         pass
 
-    def moveJoint(self, joint_name, degrees, mode):
+    def move_joint(self, joint_name, degrees, mode: JointMovement):
         """
 
         :param joint_name:
         :param degrees:
         :param mode: 1 for absolute positioning and 2 for relative positioning
-        """
+         """
+
+        if joint_name == "RHand" or joint_name == "LHand":
+            return self.move_hand_joint(Hand.RIGHT if joint_name == "RHand" else Hand.LEFT, math.radians(degrees), mode)
+
         device: Motor = self.getDevice(joint_name)
         sensor: PositionSensor = device.getPositionSensor()
         sensor.enable(self.timeStep)
 
         self.step(self.timeStep)
 
-        absolute = mode == 1
-
-        rad = math.radians(degrees) if absolute else sensor.getValue() + math.radians(degrees)
+        rad = math.radians(degrees) if mode == JointMovement.ABSOLUTE else sensor.getValue() + math.radians(degrees)
         rad = min(rad, device.getMaxPosition())
         rad = max(rad, device.getMinPosition())
 
@@ -309,6 +344,12 @@ class Nao (Robot):
                 break
 
         sensor.disable()
+
+    def close_hand(self, hand: Hand):
+        self.move_hand_joint(hand, 0)
+
+    def open_hand(self, hand: Hand):
+        self.move_hand_joint(hand, 1)
 
     def turn(self, degree):
         """
@@ -344,7 +385,6 @@ class Nao (Robot):
 
     def blink(self):
         pass
-
 
     def wait(self, time):
         """
