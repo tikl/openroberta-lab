@@ -577,176 +577,36 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        this.sb.append("h.setLeds(");
-        switch ( setLeds.getLed() ) {
-            case ALL:
-                this.sb.append("\"AllLeds\", ");
-                break;
-            case CHEST:
-                this.sb.append("\"ChestLeds\", ");
-                break;
-            case EARS:
-                this.sb.append("\"EarLeds\", ");
-                break;
-            case EYES:
-                this.sb.append("\"FaceLeds\", ");
-                break;
-            case HEAD:
-                this.sb.append("\"BrainLeds\", ");
-                break;
-            case LEFTEAR:
-                this.sb.append("\"LeftEarLeds\", ");
-                break;
-            case LEFTEYE:
-                this.sb.append("\"LeftFaceLeds\", ");
-                break;
-            case LEFTFOOT:
-                this.sb.append("\"LeftFootLeds\", ");
-                break;
-            case RIGHTEAR:
-                this.sb.append("\"RightEarLeds\", ");
-                break;
-            case RIGHTEYE:
-                this.sb.append("\"RightFaceLeds\", ");
-                break;
-            case RIGHTFOOT:
-                this.sb.append("\"RightFootLeds\", ");
-                break;
-        }
+        this.sb.append("robot.set_led(Led.");
+        this.sb.append(setLeds.getLed().toString());
+        this.sb.append(", ");
         setLeds.getColor().accept(this);
-        this.sb.append(", 0.1)");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        this.sb.append("h.setIntensity(");
-        switch ( setIntensity.getLed() ) {
-            case ALL:
-                this.sb.append("\"AllLeds\", ");
-                break;
-            case CHEST:
-                this.sb.append("\"ChestLeds\", ");
-                break;
-            case EARS:
-                this.sb.append("\"EarLeds\", ");
-                break;
-            case EYES:
-                this.sb.append("\"FaceLeds\", ");
-                break;
-            case HEAD:
-                this.sb.append("\"BrainLeds\", ");
-                break;
-            case LEFTEAR:
-                this.sb.append("\"LeftEarLeds\", ");
-                break;
-            case LEFTEYE:
-                this.sb.append("\"LeftFaceLeds\", ");
-                break;
-            case LEFTFOOT:
-                this.sb.append("\"LeftFootLeds\", ");
-                break;
-            case RIGHTEAR:
-                this.sb.append("\"RightEarLeds\", ");
-                break;
-            case RIGHTEYE:
-                this.sb.append("\"RightFaceLeds\", ");
-                break;
-            case RIGHTFOOT:
-                this.sb.append("\"RightFootLeds\", ");
-                break;
-        }
+        this.sb.append("robot.set_intensity(Led.");
+        this.sb.append(setIntensity.getLed().toString());
+        this.sb.append(", ");
         setIntensity.getIntensity().accept(this);
         this.sb.append(")");
         return null;
     }
 
-    /*@Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb.append(ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255");
-        return null;
-    }*/
-
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
-        this.sb.append("h.ledOff(");
-        switch ( ledOff.getLed() ) {
-            case ALL:
-                this.sb.append("\"AllLeds\"");
-                break;
-            case CHEST:
-                this.sb.append("\"ChestLeds\"");
-                break;
-            case EARS:
-                this.sb.append("\"EarLeds\"");
-                break;
-            case EYES:
-                this.sb.append("\"FaceLeds\"");
-                break;
-            case HEAD:
-                this.sb.append("\"BrainLeds\"");
-                break;
-            case LEFTEAR:
-                this.sb.append("\"LeftEarLeds\"");
-                break;
-            case LEFTEYE:
-                this.sb.append("\"LeftFaceLeds\"");
-                break;
-            case LEFTFOOT:
-                this.sb.append("\"LeftFootLeds\"");
-                break;
-            case RIGHTEAR:
-                this.sb.append("\"RightEarLeds\"");
-                break;
-            case RIGHTEYE:
-                this.sb.append("\"RightFaceLeds\"");
-                break;
-            case RIGHTFOOT:
-                this.sb.append("\"RightFootLeds\"");
-                break;
-        }
+        this.sb.append("robot.led_off(Led.");
+        this.sb.append(ledOff.getLed().toString());
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
-        this.sb.append("h.ledReset(");
-        switch ( ledReset.getLed() ) {
-            case ALL:
-                this.sb.append("\"AllLeds\"");
-                break;
-            case CHEST:
-                this.sb.append("\"ChestLeds\"");
-                break;
-            case EARS:
-                this.sb.append("\"EarLeds\"");
-                break;
-            case EYES:
-                this.sb.append("\"FaceLeds\"");
-                break;
-            case HEAD:
-                this.sb.append("\"BrainLeds\"");
-                break;
-            case LEFTEAR:
-                this.sb.append("\"LeftEarLeds\"");
-                break;
-            case LEFTEYE:
-                this.sb.append("\"LeftFaceLeds\"");
-                break;
-            case LEFTFOOT:
-                this.sb.append("\"LeftFootLeds\"");
-                break;
-            case RIGHTEAR:
-                this.sb.append("\"RightEarLeds\"");
-                break;
-            case RIGHTEYE:
-                this.sb.append("\"RightFaceLeds\"");
-                break;
-            case RIGHTFOOT:
-                this.sb.append("\"RightFootLeds\"");
-                break;
-        }
+        this.sb.append("robot.led_off(Led.");
+        this.sb.append(ledReset.getLed().toString());
         this.sb.append(")");
         return null;
     }
