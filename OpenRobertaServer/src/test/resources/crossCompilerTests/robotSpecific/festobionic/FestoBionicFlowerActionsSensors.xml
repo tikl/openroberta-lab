@@ -1,0 +1,114 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
+			<instance x="247" y="50">
+				<block type="robControls_start_ardu" id="]jVOGKiSE~SUZ|hoE%Va" intask="true" deletable="false">
+					<mutation declare="false"/>
+					<field name="DEBUG"/>
+				</block>
+				<block type="robControls_loopForever_ardu" id="g}+R3m4?m1pieBnaIJPg" intask="true" deletable="false" movable="false">
+					<statement name="DO">
+						<block type="robControls_if" id="U;!q!vBG6+(X{g)SJb@z" intask="true">
+							<value name="IF0">
+								<block type="robSensors_key_getSample" id="sF;pro%c9e`7THg~9),)" intask="true">
+									<mutation mode="PRESSED"/>
+									<field name="MODE">PRESSED</field>
+									<field name="SENSORPORT">T</field>
+									<field name="SLOT"/>
+								</block>
+							</value>
+							<statement name="DO0">
+								<block type="makeblockActions_leds_on" id="Nq/=*z;s`N8Ip.e=(:@%" intask="true">
+									<field name="LEDSIDE">Left</field>
+									<value name="COLOR">
+										<block type="robColour_picker" id="BEMmL9O]Fv/xY#vv|2ei" intask="true">
+											<field name="COLOUR">#000000</field>
+										</block>
+									</value>
+								</block>
+							</statement>
+						</block>
+						<block type="robControls_if" id="=~ySBjGHBV!ZjsV)9q}W" intask="true">
+							<value name="IF0">
+								<block type="robSensors_key_getSample" id="MGp7Wl=]zy54[DPSuh?F" intask="true">
+									<mutation mode="PRESSED"/>
+									<field name="MODE">PRESSED</field>
+									<field name="SENSORPORT">T2</field>
+									<field name="SLOT"/>
+								</block>
+							</value>
+							<statement name="DO0">
+								<block type="makeblockActions_leds_on" id="g:vxEzwTtbo_f7wj;~J]" intask="true">
+									<field name="LEDSIDE">Left</field>
+									<value name="COLOR">
+										<block type="robColour_picker" id="~1/[Mx(ms?zwHCr:T2+Z" intask="true">
+											<field name="COLOUR">#ffff00</field>
+										</block>
+									</value>
+								</block>
+							</statement>
+						</block>
+						<block type="festobionicActions_stepmotor" id=":QP}Ge96di0w4)aC5.][" intask="true">
+							<value name="VALUE">
+								<block type="math_arithmetic" id="/QIvxF}dz7V+`/;_B~fK" intask="true">
+									<field name="OP">DIVIDE</field>
+									<value name="A">
+										<block type="robSensors_light_getSample" id="-O,|70l:N^._4.A7V7U|" intask="true">
+											<mutation mode="VALUE"/>
+											<field name="MODE">VALUE</field>
+											<field name="SLOT"/>
+											<field name="SENSORPORT">_L</field>
+											<hide name="SENSORPORT" value="_L"/>
+										</block>
+									</value>
+									<value name="B">
+										<block type="math_number" id="|s;CB][%Wzzhy!Yo9Ih3" intask="true">
+											<field name="NUM">800</field>
+										</block>
+									</value>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
+			<instance x="138" y="88">
+				<block type="robConf_led" id="1" intask="true">
+					<field name="NAME">L</field>
+					<field name="INPUT">LED_BUILTIN</field>
+				</block>
+			</instance>
+			<instance x="118" y="183">
+				<block type="robConf_rgbled" id="QqatH;)686_y[#suc]%`" intask="true">
+					<field name="NAME">_R</field>
+				</block>
+			</instance>
+			<instance x="305" y="182">
+				<block type="robConf_stepmotor" id="2G1[X9]0h3fagAp2|+:*" intask="true">
+					<field name="NAME">S</field>
+				</block>
+			</instance>
+			<instance x="118" y="221">
+				<block type="robConf_key" id="L@ti@0W4[hC;D,l+Cltz" intask="true">
+					<field name="NAME">T</field>
+					<field name="PIN1">PAD1</field>
+				</block>
+			</instance>
+			<instance x="319" y="250">
+				<block type="robConf_light" id="pBQW-1O[vyBsZ4w8doWD" intask="true">
+					<field name="NAME">_L</field>
+				</block>
+			</instance>
+			<instance x="120" y="281">
+				<block type="robConf_key" id="GhSW_3un10;r-l4RnR^S" intask="true">
+					<field name="NAME">T2</field>
+					<field name="PIN1">PAD2</field>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>
