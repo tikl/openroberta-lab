@@ -1,0 +1,138 @@
+#VRML_SIM R2021c utf8
+WorldInfo {
+  info [
+    "A NAO robot in a living room"
+  ]
+  title "NAO room"
+  basicTimeStep 10
+  coordinateSystem "NUE"
+  contactProperties [
+    ContactProperties {
+      material1 "key"
+      material2 "keyhole"
+      coulombFriction [
+        0.2
+      ]
+    }
+    ContactProperties {
+      material1 "NAO foot material"
+      coulombFriction [
+        7
+      ]
+      bounce 0.3
+      bounceVelocity 0.003
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.8841791677681742 -0.4514470890101333 -0.1200946506263097 0.5845065405710675
+  position -1.130871489516973 2.5618818562483603 3.417079903545578
+  followType "None"
+}
+Television {
+  translation -0.6 1 -1.9
+}
+Background {
+  skyColor [
+    0.827451 0.843137 0.811765
+  ]
+}
+Key {
+  translation 0.89 0.418 -1.52
+  rotation 0 0 1 -1.5707996938995747
+  contactMaterial "key"
+}
+KeyPot {
+  translation 0.15 0.3 0
+}
+Table {
+  rotation 1 0 0 4.692820414042842e-06
+  size 0.6 0.3 0.8
+  trayAppearance PaintedWood {
+  }
+  legAppearance PaintedWood {
+  }
+}
+Door {
+  hidden translation_5 -7.818301561712815e-11 0 0.0010000003751200748
+  translation 1 0 -2
+  size 1 2.2 0.1
+  position 1.5794528516523498e-10
+  jointAtLeft FALSE
+  doorThickness 0
+  frameAppearance NULL
+  doorHandle DoorLever {
+    rotation 0 0 1 3.141592653589793
+  }
+}
+DEF NAO Nao {
+  translation 1.0025492555167363 0.33448337265326583 -1.7463351474692634
+  rotation 0.5787509564475986 0.5769471349935084 0.5763500098323695 -2.0931396940985483
+  controller "nao_demo_python"
+  controllerArgs [
+    ""
+  ]
+  cameraWidth 320
+  cameraHeight 240
+}
+Robot {
+  name "supervisor"
+  controller "streaming_supervisor"
+  supervisor TRUE
+}
+SoccerBall {
+  translation -1 0.11370569999993595 -1
+  rotation 0 1 0 0
+}
+Floor {
+  translation 0 0.001 0
+  size 4 4
+  appearance Appearance {
+    material Material {
+      ambientIntensity 0
+      diffuseColor 0.533333 0.541176 0.521569
+      emissiveColor 0.533333 0.541176 0.521569
+      shininess 0
+    }
+  }
+}
+Floor {
+  translation 0 0.002 0
+  name "carpet-thin"
+  size 2 2
+  appearance Appearance {
+    material Material {
+      ambientIntensity 0
+      diffuseColor 0.215686 0.827451 0.988235
+      emissiveColor 0.215686 0.827451 0.988235
+      shininess 0
+    }
+  }
+}
+Wall {
+  translation -0.8 0 -2
+  name "wall-back1"
+  size 2.6 2.2 0.1
+}
+Wall {
+  translation 1.7 0 -2
+  name "wall-back2"
+  size 0.6 2.2 0.1
+}
+Wall {
+  translation 2 0 0
+  rotation 0 1 0 1.5865096938995749
+  name "wall-right"
+  size 4 2.2 0.1
+}
+Wall {
+  translation -2 0 0
+  rotation 0 1 0 1.5865096938995749
+  name "wall-left"
+  size 4 2.2 0.1
+}
+PointLight {
+  attenuation 0 0 1
+  intensity 6
+  location 0 2 0
+}

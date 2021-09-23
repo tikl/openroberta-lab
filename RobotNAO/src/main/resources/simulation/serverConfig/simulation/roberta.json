@@ -1,0 +1,7 @@
+{
+  "webotsHome": "/home/cyberbotics/webots",
+  "fullyQualifiedDomainName": "sim.open-roberta.org",
+  "port": 2000,
+  "portRewrite": true,
+  "logDir": "log/"
+}

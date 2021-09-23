@@ -1,3 +1,8 @@
+#!/usr/bin/python
+
+import math
+import time
+import random
 # Copyright 1996-2021 Cyberbotics Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +20,11 @@
 """Example of Python controller for Nao robot.
    This demonstrates how to access sensors and actuators"""
 import math
-from controller import Robot, Motion, Motor, PositionSensor, LED
+from controller import Robot, Motion, Motor, PositionSensor
 from enum import Enum
-from typing import List, Dict
+from typing import List
 
-FORWARD_SPEED = 50 / 6.76  # cm / s
+FORWARD_SPEED = 1000 / 107 # 50 / 6.76  # cm / s
 BACKWARD_SPEED = 19.23 / 2.6  # cm / s
 TURN_SPEED = 60 / 4.5  # °/s
 
@@ -37,20 +42,6 @@ class JointMovement(Enum):
     RELATIVE = 1
 
 
-class Led(Enum):
-    EYES = 0,
-    LEFTEYE = 1
-    RIGHTEYE = 2
-    EARS = 3
-    LEFTEAR = 4
-    RIGHTEAR = 5
-    CHEST = 6
-    HEAD = 7
-    LEFTFOOT = 8
-    RIGHTFOOT = 9
-    ALL = 10
-
-
 class Nao(Robot):
     PHALANX_MAX = 8
 
@@ -58,7 +49,8 @@ class Nao(Robot):
     def loadMotionFiles(self):
         self.standup = Motion('../../motions/StandUpFromFront.motion')
         self.handWave = Motion('../../motions/HandWave.motion')
-        self.forwards = Motion('../../motions/Forwards50.motion')
+        self.forwards = Motion('../../motions/Forwards.motion')
+        self.reset = Motion('../../motions/Reset.motion')
         self.backwards = Motion('../../motions/Backwards.motion')
         self.sideStepLeft = Motion('../../motions/SideStepLeft.motion')
         self.sideStepRight = Motion('../../motions/SideStepRight.motion')
@@ -284,20 +276,14 @@ class Nao(Robot):
         self.rfootrbumper.enable(self.timeStep)
 
         # there are 7 controlable LED groups in Webots
-        self.leds : Dict[Led, List[LED]] = {
-            Led.LEFTEYE: [self.getDevice('Face/Led/Left')],
-            Led.RIGHTEYE: [self.getDevice('Face/Led/Right')],
-            Led.LEFTEAR: [self.getDevice('Ears/Led/Left')],
-            Led.RIGHTEAR: [self.getDevice('Ears/Led/Right')],
-            Led.LEFTFOOT: [self.getDevice('LFoot/Led')],
-            Led.RIGHTFOOT: [self.getDevice('RFoot/Led')],
-            Led.CHEST: [self.getDevice('ChestBoard/Led')]
-        }
-
-        self.leds[Led.EARS] = self.leds[Led.LEFTEAR] + self.leds[Led.RIGHTEAR]
-        self.leds[Led.EYES] = self.leds[Led.LEFTEYE] + self.leds[Led.RIGHTEYE]
-        self.leds[Led.HEAD] = self.leds[Led.EARS]
-        self.leds[Led.ALL] = self.leds[Led.EYES] + self.leds[Led.LEFTFOOT] + self.leds[Led.RIGHTFOOT]
+        self.leds = []
+        self.leds.append(self.getDevice('ChestBoard/Led'))
+        self.leds.append(self.getDevice('RFoot/Led'))
+        self.leds.append(self.getDevice('LFoot/Led'))
+        self.leds.append(self.getDevice('Face/Led/Right'))
+        self.leds.append(self.getDevice('Face/Led/Left'))
+        self.leds.append(self.getDevice('Ears/Led/Right'))
+        self.leds.append(self.getDevice('Ears/Led/Left'))
 
         # get phalanx motor tags
         # the real Nao has only 2 motors for RHand/LHand
@@ -330,22 +316,14 @@ class Nao(Robot):
         self.findAndEnableDevices()
         self.loadMotionFiles()
 
-    def set_led(self, led: Led, rgb):
-        for ledActor in self.leds[led]:
-            is_only_intensity = ledActor in self.leds[Led.EARS] or ledActor in self.leds[Led.CHEST]
-            if is_only_intensity:
-                ledActor.set(rgb & 0xFF)
-            else:
-                ledActor.set(rgb)
-
-    def led_off(self, led: Led):
-        self.set_led(led, 0)
-
-    def set_intensity(self, led: Led, intensity):
-        self.set_led(led, int((intensity / 100) * 255))
-
     def reset_pose(self):
-        pass
+        self.reset.play()
+
+        while self.step(self.timeStep) != -1:
+            if self.reset.isOver():
+                break
+
+        self.reset.stop()
 
     def move_joint(self, joint_name, degrees, mode: JointMovement):
         """
@@ -398,14 +376,25 @@ class Nao(Robot):
         self.reset_pose()
 
     def walk(self, distance):
-        motion = self.forwards if distance >= 0 else self.backwards
-        speed = FORWARD_SPEED if distance >= 0 else BACKWARD_SPEED
+        motion = self.forwards #if distance >= 0 else self.backwards
+        if distance < 0:
+            motion.setReverse(True)
+        speed = FORWARD_SPEED
 
         motion.setLoop(True)
         motion.play()
-        self.wait((abs(distance) / speed) * 1000)
+        start_time = self.getTime()
+        time = (abs(distance) / speed) * 1000        
+               
+        while self.step(self.timeStep) != -1:
+          if self.getTime() - start_time > (time / 1000):
+            break
+          if distance >= 0 and motion.getTime() == 1360 :  # we reached the end of forward.motion
+            motion.setTime(360)
+          if distance < 0 and motion.getTime() == 360 :  # we reached the end of forward.motion
+            motion.setTime(1360)
+ 
         motion.stop()
-
         self.reset_pose()
 
     def wave(self):
@@ -429,3 +418,22 @@ class Nao(Robot):
         while self.step(self.timeStep) != -1:
             if self.getTime() - start_time > (time / 1000):
                 break
+
+
+
+def run():
+    robot = Nao()
+    robot.walk(20)
+    robot.turn(180)
+    robot.wait(1000)
+    robot.walk(-50)
+
+def main():
+    try:
+        run()
+    except Exception as e:
+        raise
+    
+
+if __name__ == "__main__":
+    main()

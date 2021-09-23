@@ -85,7 +85,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements INaoVisitor<Void> {
 
-    public static final Path NAO_SIM_PATH = Paths.get("RobotNAO/src/main/resources/nao_sim.py");
+    public static final Path NAO_SIM_PATH = Paths.get("RobotNAO/src/main/resources/simulation/NEPOprogTemplate.py");
     protected ILanguage language;
 
     /**
@@ -817,11 +817,10 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         nlIndent();
 
         try {
-            Files.readAllLines(NAO_SIM_PATH)
-                .forEach(line -> {
-                    this.sb.append(line);
-                    nlIndent();
-                });
+            Files.readAllLines(NAO_SIM_PATH).forEach(line -> {
+                this.sb.append(line);
+                nlIndent();
+            });
         } catch ( IOException e ) {
             throw new DbcException(e);
         }
