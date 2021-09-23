@@ -22,6 +22,8 @@ import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IFestobionicVisitor;
@@ -149,11 +151,36 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         return null;
     }
     
+    @Override
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    	String port = keysSensor.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        if(pin1.equals("PAD1"))
+        {
+        	this.sb.append("touch_sensor.isRightTouched()");
+        }
+        if(pin1.equals("PAD2"))
+        {
+        	this.sb.append("touch_sensor.isLeftTouched()");
+        }
+        
+        return null;
+    }
     
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    	//this.sb.append("analogRead(_output_" + lightSensor.getUserDefinedPort() + ")/10.24");
+    	this.sb.append("getLuminosity()");
+    	return null;
+    }
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
+        boolean i2cDefinesAdded=false;
+        boolean i2cHeaderAdded=false;
+        
+    	if ( !withWrapping ) {
             return;
         } else {
             decrIndentation();
@@ -201,6 +228,30 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
 			        nlIndent();
 			        nlIndent();
                     break;
+                case SC.KEY:
+                	if(!i2cDefinesAdded)
+                	{
+                		this.sb.append("//I2C communication GPIO");
+    			        nlIndent();
+    			        this.sb.append("#define I2C_SDA 4");
+    			        nlIndent();
+    			        this.sb.append("#define I2C_SCL 5");
+    			        nlIndent();
+    			        i2cDefinesAdded=true;
+                	}
+			        break;
+                case SC.LIGHT:
+                	if(!i2cDefinesAdded)
+                	{
+                		this.sb.append("//I2C communication GPIO");
+    			        nlIndent();
+    			        this.sb.append("#define I2C_SDA 4");
+    			        nlIndent();
+    			        this.sb.append("#define I2C_SCL 5");
+    			        nlIndent();
+    			        i2cDefinesAdded=true;
+                	}
+                	break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
@@ -222,19 +273,38 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
 	          case SC.LED:
 	              break;
 	          case SC.RGBLED:
-	          	headerFiles.add("// *** BionicFlower LED headerfiles ***");
-	             nlIndent();
-	             headerFiles.add("#include <Adafruit_NeoPixel.h>");
-	             nlIndent();
-	             break;
+	        	  headerFiles.add("// *** BionicFlower LED headerfiles ***");
+	        	  headerFiles.add("#include <Adafruit_NeoPixel.h>");
+	        	  break;
 	          case SC.STEPMOTOR:
-	          	headerFiles.add("// *** BionicFlower stepmotor headerfiles ***");
-	            nlIndent();
-	            headerFiles.add("#include <BasicStepperDriver.h>");
-	            nlIndent();
-	            break;
-	          default:
-	            throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+	          	  headerFiles.add("// *** BionicFlower stepmotor headerfiles ***");
+	          	  headerFiles.add("#include <BasicStepperDriver.h>");
+	              break;
+              case SC.KEY:
+            	  headerFiles.add("// *** BionicFlower keysensor headerfiles ***");
+  	              headerFiles.add("// Touch sensor's library");
+  	              headerFiles.add("#include <SparkFun_CAP1203_Registers.h>");
+	              headerFiles.add("#include <SparkFun_CAP1203.h>");
+  	              if(!i2cHeaderAdded)
+  	              {
+  	                  headerFiles.add("//I2C communication library");
+  	                  headerFiles.add("#include <Wire.h>");
+  	  	              i2cHeaderAdded=true;
+  	  	          }
+	              break;
+              case SC.LIGHT:
+            	  headerFiles.add("// *** BionicFlower lightsensor headerfiles ***");
+            	  headerFiles.add("// Light sensor's library>");
+            	  headerFiles.add("#include \"RPR-0521RS.h\"");
+            	  if(!i2cHeaderAdded)
+            	  {
+            		  headerFiles.add("//I2C communication library");
+            		  headerFiles.add("#include <Wire.h>");
+            		  i2cHeaderAdded=true;
+            	  }
+            	  break;
+              default:
+            	  throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
 	        }
 	    }
 	    for ( String header : headerFiles ) {
@@ -246,6 +316,9 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
     }
 
     private void generateConfigurationSetup() {
+        boolean i2cInitialized=false;
+        boolean touchInitialized=false;
+    	
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.LED:
@@ -277,6 +350,54 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     this.sb.append("motor_calibration();");
                     nlIndent();
                     break;
+                case SC.KEY:
+                	if(!i2cInitialized)
+                	{
+	                	this.sb.append("// *** BionicFlower i2c initialization ***");
+	                    nlIndent();
+	                    this.sb.append("// start the I2C communication");
+	                    nlIndent();
+	                    this.sb.append("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
+	                    nlIndent();
+	                    i2cInitialized=true;
+                	}
+                	if(!touchInitialized)
+                	{
+                		this.sb.append("// Initialisation touch sensor");
+                        nlIndent();
+                        this.sb.append("// Touch sensor is connected ?");
+                        nlIndent();
+                        this.sb.append("while (touch_sensor.begin() == false)");
+                        nlIndent();
+                        this.sb.append("{");
+                        nlIndent();
+                        this.sb.append("   Serial.println(\"Not connected. Please check connections.\");");
+                        nlIndent();
+                        this.sb.append("   delay(1000);");
+                        nlIndent();
+                        this.sb.append("}");
+                        nlIndent();
+                        this.sb.append("Serial.println(\"Touch sensor connected!\");");
+                        nlIndent();
+                        touchInitialized=true;
+                	}
+                	break;
+                case SC.LIGHT:
+                	if(!i2cInitialized)
+                	{
+	                	this.sb.append("// *** BionicFlower i2c initialization ***");
+	                    nlIndent();
+	                    this.sb.append("//start the I2C communication");
+	                    nlIndent();
+	                    this.sb.append("Wire.begin(I2C_SDA, I2C_SCL, 100000);");
+	                    nlIndent();
+	                    i2cInitialized=true;
+                	}
+                	this.sb.append("//Initialisation light sensor");
+                    nlIndent();
+                    this.sb.append("rc = lightsensor.init();");
+                    nlIndent();
+                    break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
@@ -284,7 +405,8 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
     }
 
     private void generateConfigurationVariables() {
-        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
+        boolean touchSensorCreated=false;
+    	for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             String blockName = cc.getUserDefinedPortName();
             switch ( cc.getComponentType() ) {
                 case SC.LED:
@@ -318,6 +440,30 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     this.sb.append("//position of the motor between full open and full close");
                     nlIndent();
                     this.sb.append("int current_position;");
+                    nlIndent();
+                    nlIndent();
+                    break;
+                case SC.KEY:
+                	if(!touchSensorCreated)
+                	{
+                		this.sb.append("// *** BionicFlower touchsensor var declaration/object creation ***");
+                        nlIndent();
+                        this.sb.append("//Object creation : touch sensor");
+                        nlIndent();
+                        this.sb.append("CAP1203 touch_sensor=CAP1203(0x28);");
+                        nlIndent();
+                        nlIndent();
+                        touchSensorCreated=true;
+                	}
+                    break;
+                case SC.LIGHT:
+                	this.sb.append("// *** BionicFlower lightsensor var declaration/object creation ***");
+                    nlIndent();
+                    this.sb.append("// object creation : light sensor");
+                    nlIndent();
+                    this.sb.append("RPR0521RS lightsensor;");
+                    nlIndent();
+                    this.sb.append("int rc;");
                     nlIndent();
                     nlIndent();
                     break;
@@ -435,6 +581,27 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                     this.sb.append("    }");
                     nlIndent();
                     this.sb.append("  }");
+                    nlIndent();
+                    this.sb.append("}");
+                    nlIndent();
+                    nlIndent();
+                    break;
+                case SC.KEY:
+                	break;
+                case SC.LIGHT:
+                	this.sb.append("// get the value of the luminosity sensor");
+                    nlIndent();
+                    this.sb.append("uint32_t getLuminosity()");
+                    nlIndent();
+                    this.sb.append("{");
+                    nlIndent();
+                    this.sb.append("  uint32_t proximity;");
+                    nlIndent();
+                    this.sb.append("  float luminosity;");
+                    nlIndent();
+                    this.sb.append("  rc = lightsensor.get_psalsval(&proximity,&luminosity);");
+                    nlIndent();
+                    this.sb.append("  return (uint32_t)luminosity;");
                     nlIndent();
                     this.sb.append("}");
                     nlIndent();
