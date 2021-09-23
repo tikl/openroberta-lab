@@ -15,14 +15,14 @@
             </value>
         </block>
       <block type="robActions_brickLight_on" />
-      <block type="makeblockActions_leds_on">
+      <category name="BionicFlower" svg="true">
+        <block type="makeblockActions_leds_on">
           <value name="COLOR">
               <block type="robColour_picker">
                   <field name="COLOUR">#cc0000</field>
               </block>
           </value>
       </block>
-      <block type="makeblockActions_leds_off"/>
       <block type="festobionicActions_stepmotor">
         <value name="VALUE">
           <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_?" intask="true">
@@ -30,6 +30,7 @@
           </block>
         </value>
       </block>
+    </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robSensors_timer_getSample" />
