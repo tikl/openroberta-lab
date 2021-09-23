@@ -3,6 +3,11 @@
 import math
 import time
 import random
+#!/usr/bin/python
+
+import math
+import time
+import random
 # Copyright 1996-2021 Cyberbotics Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +25,9 @@ import random
 """Example of Python controller for Nao robot.
    This demonstrates how to access sensors and actuators"""
 import math
-from controller import Robot, Motion, Motor, PositionSensor
+from controller import Robot, Motion, Motor, PositionSensor, LED
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 FORWARD_SPEED = 1000 / 107 # 50 / 6.76  # cm / s
 BACKWARD_SPEED = 19.23 / 2.6  # cm / s
@@ -40,6 +45,20 @@ class Hand(Enum):
 class JointMovement(Enum):
     ABSOLUTE = 0
     RELATIVE = 1
+
+
+class Led(Enum):
+    EYES = 0,
+    LEFTEYE = 1
+    RIGHTEYE = 2
+    EARS = 3
+    LEFTEAR = 4
+    RIGHTEAR = 5
+    CHEST = 6
+    HEAD = 7
+    LEFTFOOT = 8
+    RIGHTFOOT = 9
+    ALL = 10
 
 
 class Nao(Robot):
@@ -276,14 +295,20 @@ class Nao(Robot):
         self.rfootrbumper.enable(self.timeStep)
 
         # there are 7 controlable LED groups in Webots
-        self.leds = []
-        self.leds.append(self.getDevice('ChestBoard/Led'))
-        self.leds.append(self.getDevice('RFoot/Led'))
-        self.leds.append(self.getDevice('LFoot/Led'))
-        self.leds.append(self.getDevice('Face/Led/Right'))
-        self.leds.append(self.getDevice('Face/Led/Left'))
-        self.leds.append(self.getDevice('Ears/Led/Right'))
-        self.leds.append(self.getDevice('Ears/Led/Left'))
+        self.leds : Dict[Led, List[LED]] = {
+            Led.LEFTEYE: [self.getDevice('Face/Led/Left')],
+            Led.RIGHTEYE: [self.getDevice('Face/Led/Right')],
+            Led.LEFTEAR: [self.getDevice('Ears/Led/Left')],
+            Led.RIGHTEAR: [self.getDevice('Ears/Led/Right')],
+            Led.LEFTFOOT: [self.getDevice('LFoot/Led')],
+            Led.RIGHTFOOT: [self.getDevice('RFoot/Led')],
+            Led.CHEST: [self.getDevice('ChestBoard/Led')]
+        }
+
+        self.leds[Led.EARS] = self.leds[Led.LEFTEAR] + self.leds[Led.RIGHTEAR]
+        self.leds[Led.EYES] = self.leds[Led.LEFTEYE] + self.leds[Led.RIGHTEYE]
+        self.leds[Led.HEAD] = self.leds[Led.EARS]
+        self.leds[Led.ALL] = self.leds[Led.EYES] + self.leds[Led.LEFTFOOT] + self.leds[Led.RIGHTFOOT]
 
         # get phalanx motor tags
         # the real Nao has only 2 motors for RHand/LHand
@@ -315,6 +340,20 @@ class Nao(Robot):
         # initialize stuff
         self.findAndEnableDevices()
         self.loadMotionFiles()
+
+    def set_led(self, led: Led, rgb):
+        for ledActor in self.leds[led]:
+            is_only_intensity = ledActor in self.leds[Led.EARS] or ledActor in self.leds[Led.CHEST]
+            if is_only_intensity:
+                ledActor.set(rgb & 0xFF)
+            else:
+                ledActor.set(rgb)
+
+    def led_off(self, led: Led):
+        self.set_led(led, 0)
+
+    def set_intensity(self, led: Led, intensity):
+        self.set_led(led, int((intensity / 100) * 255))
 
     def reset_pose(self):
         self.reset.play()
@@ -418,15 +457,19 @@ class Nao(Robot):
         while self.step(self.timeStep) != -1:
             if self.getTime() - start_time > (time / 1000):
                 break
+                
+                
 
 
 
 def run():
     robot = Nao()
-    robot.walk(20)
-    robot.turn(180)
-    robot.wait(1000)
-    robot.walk(-50)
+    robot.walk(185)
+    robot.turn(-90)
+    robot.walk(60)
+    robot.move_joint("RShoulderPitch", 0, JointMovement.ABSOLUTE)
+    robot.move_joint("RElbowRoll", 0, JointMovement.ABSOLUTE)
+    robot.open_hand(Hand.RIGHT)
 
 def main():
     try:

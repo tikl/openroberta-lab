@@ -25,8 +25,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.8841791677681742 -0.4514470890101333 -0.1200946506263097 0.5845065405710675
-  position -1.130871489516973 2.5618818562483603 3.417079903545578
+  orientation -0.4865663809242691 -0.8701077408644079 -0.07852182016545252 0.3667736336046902
+  position -1.5072623516834873 1.2864255240220572 4.020484743282972
   followType "None"
 }
 Television {
@@ -43,9 +43,10 @@ Key {
   contactMaterial "key"
 }
 KeyPot {
-  translation 0.15 0.3 0
+  translation 0.15 0.2 0
 }
 Table {
+  translation 0 -0.1 0
   rotation 1 0 0 4.692820414042842e-06
   size 0.6 0.3 0.8
   trayAppearance PaintedWood {
@@ -54,7 +55,7 @@ Table {
   }
 }
 Door {
-  hidden translation_5 -7.818301561712815e-11 0 0.0010000003751200748
+  hidden translation_5 -9.381961874055378e-11 0 0.0010000004501440896
   translation 1 0 -2
   size 1 2.2 0.1
   position 1.5794528516523498e-10
