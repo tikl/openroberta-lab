@@ -2,11 +2,13 @@ package de.fhg.iais.roberta.worker.compile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +44,7 @@ public class ArduinoCompilerWorker implements IWorker {
         String arduinoArch = "";
         String cmd = "";
         String cmdopt1 = "";
-        String cmdopt2 = "";
-        String cmdopt3 = "";
-
+        
         switch ( project.getRobot() ) {
             case "uno":
             case "nano":
@@ -94,15 +94,24 @@ public class ArduinoCompilerWorker implements IWorker {
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
                 mmcu = "NOTUSED";
-                cmd = "cmd.exe";
-                //cmd = "ps.exe";
-                cmdopt1 = "/c";
-                cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
-                //scriptName =
-                //    "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
-                //scriptName = "cmd.exe /c git-bash " + "/c/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/" + "arduino-resources/build_project_festobionic.sh";
-                //*orig** scriptName = "compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                if ( SystemUtils.IS_OS_WINDOWS )
+                {
+                	cmd = "cmd.exe ";
+                	cmdopt1 = "/c ";
+                	//cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
+                	//compilerResourcesDir=compilerResourcesDir.replaceAll("/","\\\\");
+                	//compilerResourcesDir = cmd + cmdopt1 + compilerResourcesDir;
+                	//cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
+                }
+                //System.out.println("********* CompilerResourceDir ********" + compilerResourcesDir);
+                //System.out.println("********* CurrentDir ********" +FileSystems.getDefault().getPath("").toAbsolutePath());
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                //scriptName=scriptName.replaceAll("/","\\\\");
+                //System.out.println("********* ScriptName1 ********" + scriptName);
+                //scriptName=cmd+cmdopt1+scriptName;
+                //System.out.println("********* ScriptName2 ********" + scriptName);
+                
+                
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
@@ -120,9 +129,9 @@ public class ArduinoCompilerWorker implements IWorker {
 
         String[] executableWithParameters =
             {
-                cmd,
-                cmdopt1,
-                cmdopt2,
+            	cmd,
+            	cmdopt1,
+                scriptName,
                 boardVariant,
                 mmcu,
                 arduinoVariant,
@@ -132,15 +141,6 @@ public class ArduinoCompilerWorker implements IWorker {
                 project.getRobot(),
                 arduinoArch
             };
-        //        LOG
-        //            .info(
-        //                "********* Parameter ******** %s %s %s %s %s %s",
-        //                executableWithParameters[0],
-        //                executableWithParameters[1],
-        //                executableWithParameters[2],
-        //                executableWithParameters[3],
-        //                executableWithParameters[4],
-        //                executableWithParameters[5]);
         Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
