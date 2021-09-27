@@ -98,20 +98,8 @@ public class ArduinoCompilerWorker implements IWorker {
                 {
                 	cmd = "cmd.exe ";
                 	cmdopt1 = "/c ";
-                	//cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
-                	//compilerResourcesDir=compilerResourcesDir.replaceAll("/","\\\\");
-                	//compilerResourcesDir = cmd + cmdopt1 + compilerResourcesDir;
-                	//cmdopt2 = "C:/_Arbeit/FestoDidacticBionic/_Repo/ora-cc-rsc/RobotArdu/arduino-resources/build_project_festobionic.sh";
                 }
-                //System.out.println("********* CompilerResourceDir ********" + compilerResourcesDir);
-                //System.out.println("********* CurrentDir ********" +FileSystems.getDefault().getPath("").toAbsolutePath());
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
-                //scriptName=scriptName.replaceAll("/","\\\\");
-                //System.out.println("********* ScriptName1 ********" + scriptName);
-                //scriptName=cmd+cmdopt1+scriptName;
-                //System.out.println("********* ScriptName2 ********" + scriptName);
-                
-                
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
@@ -127,7 +115,7 @@ public class ArduinoCompilerWorker implements IWorker {
         String sourceDir = tempDir + token + "/" + programName + "/source/";
         String targetDir = tempDir + token + "/" + programName + "/target/";
 
-        String[] executableWithParameters =
+        String[] executableWithParametersWin =
             {
             	cmd,
             	cmdopt1,
@@ -141,7 +129,33 @@ public class ArduinoCompilerWorker implements IWorker {
                 project.getRobot(),
                 arduinoArch
             };
-        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        
+        String[] executableWithParameters =
+            {
+                scriptName,
+                boardVariant,
+                mmcu,
+                arduinoVariant,
+                sourceDir,
+                programName,
+                compilerResourcesDir,
+                project.getRobot(),
+                arduinoArch
+            };
+       
+         
+        //Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        
+        Pair<Boolean, String> result;
+        if ( SystemUtils.IS_OS_WINDOWS )
+        {
+        	result = Util.runCrossCompiler(executableWithParametersWin, crosscompilerSource);
+        }
+        else
+        {
+        	result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        }
+          
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             String base64EncodedHex = null;
