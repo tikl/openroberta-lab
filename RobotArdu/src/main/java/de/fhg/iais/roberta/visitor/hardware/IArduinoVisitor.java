@@ -15,54 +15,51 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IArduinoVisitor<V>
-    extends IMotorVisitor<V>, IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, ISensorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V> {
+    extends IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V>, IHardwareVisitor<V> {
 
-    default V visitRelayAction(RelayAction<V> relayAction) {
-        throw new DbcException("Block is not implemented!");
+    V visitDropSensor(DropSensor<V> dropSensor);
+
+    default V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+        return sensorGetSample.getSensor().accept(this);
     }
 
-    default V visitSendDataAction(SendDataAction<V> sendDataAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitHumiditySensor(HumiditySensor<V> humiditySensor);
 
-    default V visitPlotPointAction(PlotPointAction<V> plotPointAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitMotionSensor(MotionSensor<V> motionSensor);
 
-    default V visitPlotClearAction(PlotClearAction<V> plotClearAction) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor);
 
-    default V visitGpsSensor(GpsSensor<V> gpsSensor) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitGyroSensor(GyroSensor<V> gyroSensor);
 
-    default V visitEnvironmentalSensor(EnvironmentalSensor<V> environmentalSensor) {
-        throw new DbcException("Block is not implemented!");
-    }
+    V visitInfraredSensor(InfraredSensor<V> infraredSensor);
 
-    @Override
-    default V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
-        throw new DbcException("Not supported!");
-    }
+    V visitLightSensor(LightSensor<V> lightSensor);
 
-    @Override
-    default V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
-        throw new DbcException("Not supported!");
-    }
+    V visitMoistureSensor(MoistureSensor<V> moistureSensor);
 
-    @Override
-    default V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        throw new DbcException("Not supported!");
-    }
-    
+    V visitMotorOnAction(MotorOnAction<V> motorOnAction);
+
+    V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor);
+
+    V visitPulseSensor(PulseSensor<V> pulseSensor);
+
+    V visitRelayAction(RelayAction<V> relayAction);
+    V visitKeysSensor(KeysSensor<Void> button);
+
+    V visitRfidSensor(RfidSensor<V> rfidSensor);
+
+    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+
+    V visitTimerSensor(TimerSensor<V> timerSensor);
+
+    V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+
+    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
     default V visitLedOffAction(LedOffAction<V> ledOffAction) {
         throw new DbcException("Block is not implemented!");
     }
