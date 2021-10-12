@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.worker.compile;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -90,7 +89,8 @@ public class ArduinoCompilerWorker implements IWorker {
                 mmcu = "atmega88";
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_bob3.sh";
                 break;
-            case "festobionic":
+			case "festobionic":
+            case "festobionicflower":
                 boardVariant = "esp32";
                 arduinoVariant = "ARDUINO_ESP32_DEV";
                 mmcu = "NOTUSED";
@@ -99,7 +99,7 @@ public class ArduinoCompilerWorker implements IWorker {
                 	cmd = "cmd.exe ";
                 	cmdopt1 = "/c ";
                 }
-                scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
+                scriptName = compilerResourcesDir + "arduino-resources/build_project_" + project.getRobot() + ".sh";
                 arduinoArch = "esp32";
                 break;
             case "nano33ble":
@@ -145,6 +145,7 @@ public class ArduinoCompilerWorker implements IWorker {
        
          
         //Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        //System.out.println("************** Script:" + scriptName);
         
         Pair<Boolean, String> result;
         if ( SystemUtils.IS_OS_WINDOWS )

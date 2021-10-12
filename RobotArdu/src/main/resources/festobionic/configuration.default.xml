@@ -5,9 +5,4 @@
             <field name="INPUT">LED_BUILTIN</field>
         </block>
     </instance>
-    <!-- <instance x="138" y="200"> -->
-      <!-- <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false"> -->
-          <!-- <field name="NAME">_R</field> -->
-      <!-- </block> -->
-  <!-- </instance> -->
 </block_set>
