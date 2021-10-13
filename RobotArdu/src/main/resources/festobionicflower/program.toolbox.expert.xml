@@ -1,12 +1,12 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name="TOOLBOX_ACTION" svg="true">
-<!--         <block type="robActions_serial_print"> -->
-<!--             <value name="OUT"> -->
-<!--                 <block type="text"> -->
-<!--                     <field name="TEXT">Hallo</field> -->
-<!--                 </block> -->
-<!--             </value> -->
-<!--         </block> -->
+      <block type="robActions_serial_print">
+            <value name="OUT">
+                <block type="text">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
       <block type="makeblockActions_leds_on">
         <value name="COLOR">
           <block type="robColour_picker">
