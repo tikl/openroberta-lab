@@ -77,5 +77,48 @@
         <block type="text" />
         <block type="text_comment" />
     </category>
+  <category name="TOOLBOX_COLOUR" svg="true">
+    <block type="robColour_picker">
+      <field name="COLOUR">#999999</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#cc0000</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#ff6600</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#ffcc33</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#33cc00</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#00cccc</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#3366ff</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#cc33cc</field>
+    </block>
+    <block type="naoColour_rgb">
+      <value name="RED">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="GREEN">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="BLUE">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+    </block>
+  </category>
     <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
 </toolbox_set>
