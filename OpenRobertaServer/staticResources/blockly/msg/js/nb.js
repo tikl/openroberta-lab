@@ -1260,7 +1260,6 @@ Blockly.Msg.PORT_INTERNAL = "Port internal";  // untranslated
 Blockly.Msg.PORT_KNEE = "knee";  // untranslated
 Blockly.Msg.PORT_SHOULDER = "shoulder";  // untranslated
 Blockly.Msg.PORT_WRIST = "wrist";  // untranslated
-Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Represents a potentiometer.";  // untranslated
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "tillat uttalelser";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "med:";

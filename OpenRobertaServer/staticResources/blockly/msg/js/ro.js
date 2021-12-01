@@ -1260,7 +1260,6 @@ Blockly.Msg.PORT_INTERNAL = "Port internal";  // untranslated
 Blockly.Msg.PORT_KNEE = "genunchi";
 Blockly.Msg.PORT_SHOULDER = "umar";
 Blockly.Msg.PORT_WRIST = "incheietura";
-Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Reprezinta un potentiometru";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "permite declarațiile";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "cu:";

@@ -1260,7 +1260,6 @@ Blockly.Msg.PORT_INTERNAL = "Port intern";
 Blockly.Msg.PORT_KNEE = "Knie";
 Blockly.Msg.PORT_SHOULDER = "Schulter";
 Blockly.Msg.PORT_WRIST = "Brust";
-Blockly.Msg.POSITION = "Position";
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Block für den Potentiometer.";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "Aussagen erlauben";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "mit:";

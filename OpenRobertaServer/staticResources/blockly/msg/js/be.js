@@ -1260,7 +1260,6 @@ Blockly.Msg.PORT_INTERNAL = "Port internal";  // untranslated
 Blockly.Msg.PORT_KNEE = "калена";
 Blockly.Msg.PORT_SHOULDER = "плячо";
 Blockly.Msg.PORT_WRIST = "запясце";
-Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Прадстаўляе патэнцыяметр";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "дазволіць аператары";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "з:";
