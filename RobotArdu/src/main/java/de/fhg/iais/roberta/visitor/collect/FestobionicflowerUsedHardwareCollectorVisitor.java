@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
 
 /**
@@ -42,16 +40,16 @@ public final class FestobionicflowerUsedHardwareCollectorVisitor extends Abstrac
         return null;
     }
 
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitKeysSensor(KeysSensor<Void> button) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    //    @Override
+    //    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    //        return null;
+    //    }
+    //
+    //    @Override
+    //    public Void visitKeysSensor(KeysSensor<Void> button) {
+    //        // TODO Auto-generated method stub
+    //        return null;
+    //    }
 
     
 
