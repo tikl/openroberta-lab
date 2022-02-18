@@ -55,21 +55,20 @@ public interface IArduinoVisitor<V>
 
     V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
 
+    V visitVoltageSensor(VoltageSensor<Void> potentiometer);
+
     V visitTimerSensor(TimerSensor<V> timerSensor);
 
     V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
 
     V visitVoltageSensor(VoltageSensor<V> voltageSensor);
-    default V visitLedOffAction(LedOffAction<V> ledOffAction) {
+   V visitLedOffAction(LedOffAction<V> ledOffAction);  
         throw new DbcException("Block is not implemented!");
     }
-
-    default V visitLedOnAction(LedOnAction<V> ledOnAction) {
+   V visitLedOnAction(LedOnAction<V> ledOnAction);
         throw new DbcException("Block is not implemented!");
     }
-
-    default V visitStepMotorAction(StepMotorAction<Void> stepMotorAction) {
+	V visitStepMotorAction(StepMotorAction<Void> stepMotorAction);
     	throw new DbcException("Block is not implemented!");
     }
-
 }
