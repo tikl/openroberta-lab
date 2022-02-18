@@ -4,8 +4,6 @@ package de.fhg.iais.roberta.visitor.hardware;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 
@@ -77,8 +75,8 @@ public interface IFestobionicflowerVisitor<V> extends ISensorVisitor<V> {
 
     V visitStepMotorAction(StepMotorAction<Void> stepMotorAction);
 
-    V visitKeysSensor(KeysSensor<V> keysSensor);
-
-    V visitLightSensor(LightSensor<V> lightSensor);
+    //    V visitKeysSensor(KeysSensor<V> keysSensor);
+    //
+    //    V visitLightSensor(LightSensor<V> lightSensor);
 
 }
