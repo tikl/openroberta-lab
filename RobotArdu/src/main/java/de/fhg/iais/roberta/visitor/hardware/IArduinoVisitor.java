@@ -1,18 +1,24 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
-import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
@@ -61,14 +67,10 @@ public interface IArduinoVisitor<V>
 
     V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
 
-    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
-   V visitLedOffAction(LedOffAction<V> ledOffAction);  
-        throw new DbcException("Block is not implemented!");
-    }
-   V visitLedOnAction(LedOnAction<V> ledOnAction);
-        throw new DbcException("Block is not implemented!");
-    }
-	V visitStepMotorAction(StepMotorAction<Void> stepMotorAction);
-    	throw new DbcException("Block is not implemented!");
-    }
+    //    V visitLedOffAction(LedOffAction<V> ledOffAction);  
+    //   
+    //    V visitLedOnAction(LedOnAction<V> ledOnAction);
+    //    
+    //    V visitStepMotorAction(StepMotorAction<Void> stepMotorAction);
+    //    
 }
