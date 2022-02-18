@@ -46,7 +46,7 @@ public class LedOffAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "LedOnAction [ ]";
+        return "LedOffAction [ ]";
     }
 
     public String getSide() {

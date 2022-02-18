@@ -13,9 +13,6 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
@@ -24,13 +21,13 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IFestobionicVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicVisitor<Void> {
+public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppVisitor implements IFestobionicflowerVisitor<Void> {
 
     /**
      * Initialize the C++ code generator visitor.
@@ -39,21 +36,6 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
      */
     public FestobionicflowerCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-    	throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-    	throw new DbcException("Not supported!");
     }
 
     @Override
