@@ -17,7 +17,7 @@ public class FestobionicflowerValidatorWorker extends ArduinoValidatorWorker {
     }
 
     @Override
-    protected AbstractBrickValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected FestobionicflowerValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new FestobionicflowerValidatorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 

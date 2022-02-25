@@ -7,9 +7,10 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.visitor.hardware.IFestobionicflowerVisitor;
 
-public final class FestobionicflowerValidatorVisitor extends AbstractBrickValidatorVisitor implements IFestobionicflowerVisitor<Void> {
+public final class FestobionicflowerValidatorVisitor extends AbstractProgramValidatorVisitor implements IFestobionicflowerVisitor<Void> {
 
     private boolean main = false;
 
@@ -18,8 +19,13 @@ public final class FestobionicflowerValidatorVisitor extends AbstractBrickValida
     }
 
     @Override
+	protected void checkSensorPort(ExternalSensor<Void> sensor) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+    @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
