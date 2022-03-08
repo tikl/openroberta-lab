@@ -273,11 +273,12 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
         boolean touchInitialized = false;
 
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
+            String blockName = usedConfigurationBlock.getUserDefinedPortName();
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.RGBLED:
                     //                	this.sb.append("// *** BionicFlower LED initialization ***");
                     //                    nlIndent();
-                    this.sb.append("pixels.begin();");
+                    this.sb.append("_rgbleds_" + blockName + ".begin();");
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
@@ -285,7 +286,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     //                    nlIndent();
                     //                    this.sb.append("//initialise the motor");
                     //                    nlIndent();
-                    this.sb.append("stepper.begin(RPM, MICROSTEPS);");
+                    this.sb.append("_stepper_" + blockName + ".begin(RPM, MICROSTEPS);");
                     nlIndent();
                     this.sb.append("motor_calibration();");
                     nlIndent();
@@ -351,14 +352,14 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                 case SC.RGBLED:
                     //                	this.sb.append("// *** BionicFlower LED var declaration ***");
                     //                    nlIndent();
-                    this.sb.append("Adafruit_NeoPixel pixels(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
+                    this.sb.append("Adafruit_NeoPixel _rgbleds_" + blockName + "(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);");
                     nlIndent();
                     nlIndent();
                     break;
                 case SC.STEPMOTOR:
                     //                	this.sb.append("// *** BionicFlower stepmotor var declaration/object creation ***");
                     //                    nlIndent();
-                    this.sb.append("BasicStepperDriver stepper(MOTOR_STEPS, DIR, STEP, SLEEP);");
+                    this.sb.append("BasicStepperDriver _stepper_" + blockName + "(MOTOR_STEPS, DIR, STEP, SLEEP);");
                     nlIndent();
                     //                    this.sb.append("//speed");
                     //                    nlIndent();
@@ -380,7 +381,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                         //                        nlIndent();
                         //                        this.sb.append("//Object creation : touch sensor");
                         //                        nlIndent();
-                        this.sb.append("CAP1203 touch_sensor=CAP1203(0x28);");
+                        this.sb.append("CAP1203 _touchsensor_" + blockName + "=CAP1203(0x28);");
                         nlIndent();
                         nlIndent();
                         touchSensorCreated = true;
@@ -391,7 +392,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     //                    nlIndent();
                     //                    this.sb.append("// object creation : light sensor");
                     //                    nlIndent();
-                    this.sb.append("RPR0521RS lightsensor;");
+                    this.sb.append("RPR0521RS _lightsensor_" + blockName + ";");
                     nlIndent();
                     this.sb.append("int rc;");
                     nlIndent();
@@ -422,12 +423,12 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     //                    this.sb.append("{");
                     incrIndentation();
                     nlIndent();
-                    this.sb.append("pixels.setPixelColor(i,color);");
+                    this.sb.append("_rgbleds_" + blockName + ".setPixelColor(i,color);");
                     decrIndentation();
                     nlIndent();
                     this.sb.append("}");
                     nlIndent();
-                    this.sb.append("pixels.show();");
+                    this.sb.append("_rgbleds_" + blockName + ".show();");
                     decrIndentation();
                     nlIndent();
                     this.sb.append("}");
@@ -453,7 +454,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     //                    this.sb.append("Serial.println(i);");
                     //                    nlIndent();
-                    this.sb.append("stepper.rotate(-360);");
+                    this.sb.append("_stepper_" + blockName + ".rotate(-360);");
                     decrIndentation();
                     nlIndent();
                     this.sb.append("}");
@@ -489,7 +490,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     //                    this.sb.append("Serial.println(current_position);");
                     //                    nlIndent();
-                    this.sb.append("stepper.rotate(360);");
+                    this.sb.append("_stepper_" + blockName + ".rotate(360);");
                     nlIndent();
                     this.sb.append("current_position = current_position +1;");
                     decrIndentation();
@@ -515,7 +516,7 @@ public final class FestobionicflowerCppVisitor extends AbstractCommonArduinoCppV
                     nlIndent();
                     //                    this.sb.append("Serial.println(current_position);");
                     //                    nlIndent();
-                    this.sb.append("stepper.rotate(-360);");
+                    this.sb.append("_stepper_" + blockName + ".rotate(-360);");
                     nlIndent();
                     this.sb.append("current_position = current_position -1;");
                     decrIndentation();
