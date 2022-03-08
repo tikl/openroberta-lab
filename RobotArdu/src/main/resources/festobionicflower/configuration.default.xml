@@ -1,7 +1,7 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionicflower" xmlversion="3.1" description="" tags="">
     <instance x="138" y="80">
         <block type="robConf_rgbled" id="%=kg52SHeud7*/CEei@q" intask="true">
-			<field name="NAME">_R</field>
+			<field name="NAME">R</field>
 		</block>
 	</instance>
 	<instance x="138" y="120">
